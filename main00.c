@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 18:06:07 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/13 19:02:19 by mbany            ###   ########.fr       */
+/*   Updated: 2024/12/13 19:23:33 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,27 @@ void handle_pwd_command(void)
     }
 }
 
+// Funkcja do obsługi polecenia "cd .."
+void handle_cd_back_command(void)
+{
+    if (chdir("..") == 0)
+    {
+        char cwd[1024];
+        if (getcwd(cwd, sizeof(cwd)) != NULL)
+        {
+            printf("Przeniesiono do katalogu nadrzednego: %s\n", cwd);
+        }
+        else
+        {
+            perror("Blad uzyskania sciezki po zmianie katalogu");
+        }
+    }
+    else
+    {
+        perror("Blad podczas przechodzenia do katalogu nadrzednego");
+    }
+}
+
 int main(void)
 {
     char *command;
@@ -64,6 +85,11 @@ int main(void)
         {
             handle_pwd_command();
         }
+        // Sprawdź, czy polecenie to "cd .."
+        else if (strcmp(command, "cd ..") == 0)
+        {
+            handle_cd_back_command();
+        }
         else
         {
             // Wydrukuj wprowadzoną komendę (do debugowania)
@@ -77,5 +103,6 @@ int main(void)
     rl_clear_history();
     return (0);
 }
+
 
 // wywołanie programu: cc main.c -lreadline -lhistory -lncurses
