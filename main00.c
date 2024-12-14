@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 18:06:07 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/14 13:52:13 by mbany            ###   ########.fr       */
+/*   Updated: 2024/12/14 16:43:07 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <string.h> // Potrzebne dla strcmp i innych operacji na ciągach znaków
 #include <unistd.h> // Potrzebne dla funkcji chdir
+#include <sys/types.h> // Potrzebne dla fork i waitpid
+#include <sys/wait.h> // Potrzebne dla waitpid
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -38,7 +40,7 @@ void handle_pwd_command(void)
     char cwd[1024];
     if (getcwd(cwd, sizeof(cwd)) != NULL)
     {
-        printf("Aktualny katalog: %s\n", cwd);
+        printf("%s\n", cwd);
     }
     else
     {
@@ -104,6 +106,36 @@ char **parse_command(char *input)
     return tokens;
 }
 
+// Funkcja do wykonywania komend zewnętrznych
+void execute_command(char **args)
+{
+    pid_t pid;
+    int status;
+
+    pid = fork();
+    if (pid == 0)
+    {
+        // Proces potomny: wykonaj polecenie
+        if (execvp(args[0], args) == -1)
+        {
+            perror("Blad wykonania komendy");
+        }
+        exit(EXIT_FAILURE);
+    }
+    else if (pid < 0)
+    {
+        // Blad podczas tworzenia procesu
+        perror("Blad forka");
+    }
+    else
+    {
+        // Proces macierzysty: czekaj na proces potomny
+        do {
+            waitpid(pid, &status, WUNTRACED);
+        } while (!WIFEXITED(status) && !WIFSIGNALED(status));
+    }
+}
+
 int main(void)
 {
     char *command;
@@ -123,12 +155,6 @@ int main(void)
         // Parsowanie komendy na argumenty
         args = parse_command(command);
 
-        printf("Tokeny:\n");
-        for (int i = 0; args[i] != NULL; i++)
-            printf("  Token[%d]: %s\n", i, args[i]);
-
-      
-
         // Sprawdź, czy polecenie to "pwd"
         if (args[0] && strcmp(args[0], "pwd") == 0)
         {
@@ -139,10 +165,10 @@ int main(void)
         {
             handle_cd_back_command();
         }
-        else
+        else if (args[0])
         {
-            // Wydrukuj wprowadzoną komendę (do debugowania)
-            printf("Wprowadzone polecenie: %s\n", command);
+            // Wykonaj inne komendy jako komendy zewnętrzne
+            execute_command(args);
         }
 
         // Zwróć pamięć po komendzie
@@ -153,5 +179,3 @@ int main(void)
     rl_clear_history();
     return (0);
 }
-
-
