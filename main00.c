@@ -6,9 +6,11 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 18:06:07 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/13 19:23:33 by mbany            ###   ########.fr       */
+/*   Updated: 2024/12/14 13:52:13 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// wywołanie programu: cc main00.c -lreadline -lhistory -lncurses
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,9 +67,47 @@ void handle_cd_back_command(void)
     }
 }
 
+// Funkcja parsująca wprowadzone polecenie na tokeny
+char **parse_command(char *input)
+{
+    int bufsize = 64, position = 0;
+    char **tokens = malloc(bufsize * sizeof(char*));
+    char *token;
+
+    if (!tokens)
+    {
+        fprintf(stderr, "Błąd alokacji pamięci\n");
+        exit(EXIT_FAILURE);
+    }
+
+    // Rozdzielenie ciągu na tokeny według spacji
+    token = strtok(input, " ");
+    while (token != NULL)
+    {
+        tokens[position] = token;
+        position++;
+
+        // Jeśli potrzeba więcej miejsca w buforze
+        if (position >= bufsize)
+        {
+            bufsize += 64;
+            tokens = realloc(tokens, bufsize * sizeof(char*));
+            if (!tokens)
+            {
+                fprintf(stderr, "Błąd alokacji pamięci\n");
+                exit(EXIT_FAILURE);
+            }
+        }
+        token = strtok(NULL, " ");
+    }
+    tokens[position] = NULL;
+    return tokens;
+}
+
 int main(void)
 {
     char *command;
+    char **args;
 
     while (1)
     {
@@ -80,13 +120,22 @@ int main(void)
             break;
         }
 
+        // Parsowanie komendy na argumenty
+        args = parse_command(command);
+
+        printf("Tokeny:\n");
+        for (int i = 0; args[i] != NULL; i++)
+            printf("  Token[%d]: %s\n", i, args[i]);
+
+      
+
         // Sprawdź, czy polecenie to "pwd"
-        if (strcmp(command, "pwd") == 0)
+        if (args[0] && strcmp(args[0], "pwd") == 0)
         {
             handle_pwd_command();
         }
         // Sprawdź, czy polecenie to "cd .."
-        else if (strcmp(command, "cd ..") == 0)
+        else if (args[0] && strcmp(args[0], "cd") == 0 && args[1] && strcmp(args[1], "..") == 0)
         {
             handle_cd_back_command();
         }
@@ -98,6 +147,7 @@ int main(void)
 
         // Zwróć pamięć po komendzie
         free(command);
+        free(args);
     }
     // Wyczyść historię przed zakończeniem programu
     rl_clear_history();
@@ -105,4 +155,3 @@ int main(void)
 }
 
 
-// wywołanie programu: cc main.c -lreadline -lhistory -lncurses
