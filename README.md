@@ -3,9 +3,6 @@
 
 <b>DONE</b><br>
 
-init: Podstawowe inicjalizowanie danych i zmiennych środowiskowych.<br><br>
-
-
 Krok 1: Podstawowe struktury i inicjalizacja projektu
 Zaimplementuj strukturę t_data:
 Zawiera wskaźnik na line (aktualnie wczytana linia z terminala).
