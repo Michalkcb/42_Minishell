@@ -17,7 +17,7 @@ Funkcja free_resources:
 Zwalnia pamięć zajętą przez dane w strukturze t_data.
 Po tym etapie program się kompiluje, wczytuje linie (ale nic nie robi z nimi) i poprawnie kończy działanie.
 
-UNDER CONSTRUCTION<br>
+<b>UNDER CONSTRUCTION</b>
 
 Krok 2: Obsługa sygnałów
 Zaimplementuj funkcję handle_signals:
