@@ -1,7 +1,8 @@
 42 Warsaw Minishell project <br><br>
 
 
-ETAPY ZROBIONE<br>
+DONE<br>
+
 init: Podstawowe inicjalizowanie danych i zmiennych środowiskowych.<br><br>
 
 
