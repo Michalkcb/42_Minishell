@@ -1,7 +1,7 @@
 42 Warsaw Minishell project <br><br>
 
 
-DONE<br>
+<b>DONE</b><br>
 
 init: Podstawowe inicjalizowanie danych i zmiennych środowiskowych.<br><br>
 
