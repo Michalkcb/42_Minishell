@@ -18,6 +18,7 @@ Zwalnia pamięć zajętą przez dane w strukturze t_data.
 Po tym etapie program się kompiluje, wczytuje linie (ale nic nie robi z nimi) i poprawnie kończy działanie.
 
 UNDER CONSTRUCTION<br>
+
 Krok 2: Obsługa sygnałów
 Zaimplementuj funkcję handle_signals:
 Obsługuje Ctrl+C (SIGINT), aby nie zakończyć programu, lecz wyczyścić linię wejściową i wyświetlić nowy prompt.
