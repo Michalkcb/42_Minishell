@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/21 18:39:52 by mbany            ###   ########.fr       */
+/*   Updated: 2024/12/22 16:02:23 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include <stdlib.h>
+#include <signal.h>
+#include <unistd.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 typedef struct s_envp
 {
@@ -46,6 +49,11 @@ typedef struct s_data
 /* errors */
 # define MANY_ARGS_ERR "Error: minishell does not accept arguments"
 # define NO_ENVP_ERR "Error: no environment found"
+
+/* Standard file descriptors.  */
+#define	STDIN_FILENO	0	/* Standard input.  */
+#define	STDOUT_FILENO	1	/* Standard output.  */
+#define	STDERR_FILENO	2	/* Standard error output.  */
 
 /* Print a message describing the meaning of the value of errno.
 
