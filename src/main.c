@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:08:10 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/21 19:05:25 by mbany            ###   ########.fr       */
+/*   Updated: 2024/12/22 16:00:26 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,73 +110,56 @@ int	ft_atoi(const char *nptr)
 	return (sign * result);
 }
 
-static int	get_num_digits(int n)
+static char	*ft_char(char *s, unsigned int number, long int len)
 {
-	int			num_digits;
-	long int	temp;
-
-	num_digits = 0;
-	temp = (long int)n;
-	if (n == 0)
-		num_digits = 1;
-	else
+	while (number > 0)
 	{
-		while (temp != 0)
-		{
-			num_digits++;
-			temp /= 10;
-		}
+		s[len--] = 48 + (number % 10);
+		number = number / 10;
 	}
-	return (num_digits);
+	return (s);
 }
 
-static int	is_negative(int n)
+static long int	ft_len(int n)
 {
-	if (n < 0)
-		return (1);
-	else
-		return (0);
-}
+	int	len;
 
-static void	convert_n(int n, char *str)
-{
-	int	i;
-	int	num_digits;
-	int	n_cp;
-
-	n_cp = n;
-	num_digits = get_num_digits(n);
-	i = num_digits - 1 + is_negative(n);
-	if (is_negative(n))
+	len = 0;
+	if (n <= 0)
+		len = 1;
+	while (n != 0)
 	{
-		str[0] = '-';
-		n_cp = -n;
+		len++;
+		n = n / 10;
 	}
-	while (i >= is_negative(n))
-	{
-		str[i] = '0' + (n_cp % 10);
-		n_cp /= 10;
-		i--;
-	}
-	str[num_digits + is_negative(n)] = '\0';
+	return (len);
 }
 
 char	*ft_itoa(int n)
 {
-	char	*str;
-	int		num_digits;
+	char				*s;
+	long int			len;
+	unsigned int		number;
+	int					sign;
 
-	num_digits = get_num_digits(n);
-	str = (char *)malloc((num_digits + is_negative(n) + 1) * sizeof(char));
-	if (!str)
+	sign = 1;
+	len = ft_len(n);
+	s = (char *)malloc(sizeof(char) * (len + 1));
+	if (!(s))
 		return (NULL);
-	if (n == -2147483648)
+	s[len--] = '\0';
+	if (n == 0)
+		s[0] = '0';
+	if (n < 0)
 	{
-		ft_strlcpy(str, "-2147483648", 12);
-		return (str);
+		sign *= -1;
+		number = n * -1;
+		s[0] = '-';
 	}
-	convert_n(n, str);
-	return (str);
+	else
+		number = n;
+	s = ft_char(s, number, len);
+	return (s);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -204,7 +187,9 @@ char	*ft_strchr(const char *s, int c)
 
 
 //ENVP
-
+/*
+ * Funkcja `free_envp` zwalnia pamięć wszystkich węzłów listy połączonej `t_envp`.
+ */
 void	free_envp(t_envp *head)
 {
 	t_envp	*tmp;
@@ -217,7 +202,11 @@ void	free_envp(t_envp *head)
 		free(tmp);
 	}
 }
-
+/*
+ * Funkcja `fetch_envp_node` przeszukuje listę `t_envp` w poszukiwaniu węzła, którego klucz odpowiada podanemu `key`.
+ * Klucz to tekst występujący przed znakiem '=' w wartości węzła.
+ * Zwraca wskaźnik na węzeł, jeśli znajdzie, lub NULL, jeśli nie znajdzie.
+ */
 t_envp	*fetch_envp_node(t_envp *head, char *key)
 {
 	t_envp*node;
@@ -233,7 +222,10 @@ t_envp	*fetch_envp_node(t_envp *head, char *key)
 	}
 	return (NULL);
 }
-
+/*
+ * Funkcja `increment_shlvl` zwiększa wartość zmiennej środowiskowej `SHLVL`.
+ * `SHLVL` odpowiada liczbie razy, kiedy uruchomiono powłokę w tej samej sesji.
+ */
 void increment_shlvl(t_envp *head)
 {
 	t_envp *node;
@@ -252,8 +244,10 @@ void increment_shlvl(t_envp *head)
 		perror("ft_strjoin");
 	free(shlvl);
 }
-
-
+/*
+ * Funkcja `fetch_envp` przekształca tablicę `envp` na listę połączoną `t_envp`.
+ * Zwraca wskaźnik na początek listy.
+ */
 t_envp *fetch_envp (char **envp)
 {
 	t_envp	*envp_node;
@@ -283,8 +277,26 @@ t_envp *fetch_envp (char **envp)
 	return (envp_head);
 }
 
+//SIGNALS
+void handle_sigint(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
+void	handle_signals(void)
+{
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, SIG_IGN);
+}
+
 
 // MAIN
+/*
+ * Funkcja `init` inicjalizuje strukturę `t_data` i przygotowuje środowisko dla programu.
+ */
 void	init(t_data *data,int argc,char **argv,char **envp)
 {
 	(void)argv;
@@ -311,5 +323,9 @@ int	main(int argc, char **argv, char **envp)
 	t_data	data;
 	
 	init(&data, argc, argv, envp);
+	while (1)
+	{
+		handle_signals();
+	}
 
 }
