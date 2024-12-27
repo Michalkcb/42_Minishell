@@ -3,300 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
+/*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:08:10 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/22 16:00:26 by mbany            ###   ########.fr       */
+/*   Updated: 2024/12/27 16:41:45 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-
-// LIBFT
-
-size_t	ft_strlen(const char *s)
+void	free_resources(t_data *data)
 {
-	size_t	i;
-
-	if (!s)
-		return (-1);
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
-}
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
-{
-	unsigned int	i;
-
-	if (n == 0)
-		return (0);
-	i = 0;
-	while (s1[i] == s2[i] && s1[i] != '\0' && s2[i] != '\0' && i < n - 1)
+	rl_clear_history();
+	if (data->cmd != NULL)
 	{
-		i++;
+		ft_free_commands(&(data->cmd));
+		data->cmd = NULL;
 	}
-	if (s1[i] == s2[i])
-		return (0);
-	else
-		return (s1[i] - s2[i]);
-}
-
-char	*ft_strdup(const char *s)
-{
-	char	*s2;
-	int		s_len;
-	int		i;
-
-	s_len = 0;
-	while (s[s_len] != '\0')
-		s_len++;
-	s2 = (char *)malloc(sizeof(char) * (s_len + 1));
-	if (!s2)
-		return (NULL);
-	i = 0;
-	while (s[i] != '\0')
+	if (data->envp_arr)
 	{
-		s2[i] = s[i];
-		i++;
+		free_ft_split(data->envp_arr);
+		data->envp_arr = NULL;
 	}
-	s2[i] = '\0';
-	return (s2);
+	free_envp(data->envp);
+	data->envp = NULL;
 }
-size_t	ft_strlcpy(char *dst, const char *src, size_t size)
-{
-	unsigned int	i;
 
-	if (!dst)
-		return (0);
-	i = 0;
-	while (src[i] != '\0' && i + 1 < size)
+int	read_line(t_data *data)
+{
+	data->line = readline("minishell> ");
+	if (!data->line)
 	{
-		dst[i] = src[i];
-		i++;
+		printf("exit\n");
+		free_resources(data);
+		exit(0);
 	}
-	if (size == 1)
-		dst[0] = '\0';
-	else if (size > 1)
-		dst[i] = '\0';
-	while (src[i] != '\0')
-		i++;
-	return (i);
-}
-int	ft_atoi(const char *nptr)
-{
-	int	result;
-	int	sign;
-	int	i;
-
-	result = 0;
-	sign = 1;
-	i = 0;
-	while (nptr[i] == ' ' || (nptr[i] >= '\t' && nptr[i] <= '\r'))
-		i++;
-	if (nptr[i] == '-')
-	{
-		sign = -1;
-		i++;
-	}
-	else if (nptr[i] == '+')
-		i++;
-	while (nptr[i] >= '0' && nptr[i] <= '9')
-	{
-		result = result * 10 + (nptr[i] - '0');
-		i++;
-	}
-	return (sign * result);
+	return (0);
 }
 
-static char	*ft_char(char *s, unsigned int number, long int len)
-{
-	while (number > 0)
-	{
-		s[len--] = 48 + (number % 10);
-		number = number / 10;
-	}
-	return (s);
-}
+/* !data->line gdy jest NULL czyli gdy użyto Ctrl+D(EOF) lub gdy był error na readline*/
+// Funkcja `init` inicjalizuje strukturę `t_data` i przygotowuje środowisko dla programu.
 
-static long int	ft_len(int n)
-{
-	int	len;
-
-	len = 0;
-	if (n <= 0)
-		len = 1;
-	while (n != 0)
-	{
-		len++;
-		n = n / 10;
-	}
-	return (len);
-}
-
-char	*ft_itoa(int n)
-{
-	char				*s;
-	long int			len;
-	unsigned int		number;
-	int					sign;
-
-	sign = 1;
-	len = ft_len(n);
-	s = (char *)malloc(sizeof(char) * (len + 1));
-	if (!(s))
-		return (NULL);
-	s[len--] = '\0';
-	if (n == 0)
-		s[0] = '0';
-	if (n < 0)
-	{
-		sign *= -1;
-		number = n * -1;
-		s[0] = '-';
-	}
-	else
-		number = n;
-	s = ft_char(s, number, len);
-	return (s);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	const char	*p;
-	int			i;
-
-	p = 0;
-	i = 0;
-	while (s[i] != '\0')
-	{
-		if (s[i] == (char)c)
-		{
-			p = &s[i];
-			break ;
-		}
-		i++;
-	}
-	if (c == '\0')
-		p = &s[i];
-	return ((char *)p);
-}
-
-
-
-
-//ENVP
-/*
- * Funkcja `free_envp` zwalnia pamięć wszystkich węzłów listy połączonej `t_envp`.
- */
-void	free_envp(t_envp *head)
-{
-	t_envp	*tmp;
-
-	while (head != NULL)
-	{
-		tmp = head;
-		head = head->next;
-		free(tmp->value);
-		free(tmp);
-	}
-}
-/*
- * Funkcja `fetch_envp_node` przeszukuje listę `t_envp` w poszukiwaniu węzła, którego klucz odpowiada podanemu `key`.
- * Klucz to tekst występujący przed znakiem '=' w wartości węzła.
- * Zwraca wskaźnik na węzeł, jeśli znajdzie, lub NULL, jeśli nie znajdzie.
- */
-t_envp	*fetch_envp_node(t_envp *head, char *key)
-{
-	t_envp*node;
-	size_t	key_len;
-
-	key_len = ft_strlen(key);
-	node = head;
-	while (node != NULL)
-	{
-		if (ft_strncmp(key, node->value, key_len) == 0 && node->value[key_len] == '=')
-			return (node);
-		node = node->next;
-	}
-	return (NULL);
-}
-/*
- * Funkcja `increment_shlvl` zwiększa wartość zmiennej środowiskowej `SHLVL`.
- * `SHLVL` odpowiada liczbie razy, kiedy uruchomiono powłokę w tej samej sesji.
- */
-void increment_shlvl(t_envp *head)
-{
-	t_envp *node;
-	char	*shlvl;
-	int	shlvl_nb;
-
-	node = fetch_envp_node(head, "SHLVL");
-	shlvl = ft_strchr(node->value, '=') + 1;
-	shlvl_nb = ft_atoi(shlvl);
-	shlvl_nb++;
-	shlvl = ft_itoa(shlvl_nb);
-	if (!shlvl)
-		perror("ft_itoa");
-	free(node->value);
-	if (!node->value)
-		perror("ft_strjoin");
-	free(shlvl);
-}
-/*
- * Funkcja `fetch_envp` przekształca tablicę `envp` na listę połączoną `t_envp`.
- * Zwraca wskaźnik na początek listy.
- */
-t_envp *fetch_envp (char **envp)
-{
-	t_envp	*envp_node;
-	t_envp	*envp_head;
-	t_envp	*envp_node_prev;
-
-	envp_node = NULL;
-	envp_head = NULL;
-	envp_node_prev = NULL;
-	while (*envp != NULL)
-	{
-		envp_node = malloc(sizeof(t_envp));
-		envp_node->value = ft_strdup(*envp);
-		if(!envp_node || !envp_node->value)
-		{
-			free_envp(envp_head);
-			return (NULL);
-		}
-		envp_node->next = NULL;
-		if (envp_node_prev != NULL)
-			envp_node_prev->next = envp_node;
-		else
-			envp_head = envp_node;
-		envp_node_prev = envp_node;
-		envp++;
-	}
-	return (envp_head);
-}
-
-//SIGNALS
-void handle_sigint(int sig)
-{
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
-void	handle_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
-}
-
-
-// MAIN
-/*
- * Funkcja `init` inicjalizuje strukturę `t_data` i przygotowuje środowisko dla programu.
- */
 void	init(t_data *data,int argc,char **argv,char **envp)
 {
 	(void)argv;
@@ -318,6 +65,8 @@ void	init(t_data *data,int argc,char **argv,char **envp)
 	data->cmd_exit_status = 0;
 }
 
+/*envp == NULL we check if we have environment variables*/
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	data;
@@ -326,6 +75,11 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		handle_signals();
+		if (read_line(&data))
+			continue ;
 	}
 
 }
+
+/* if (read_line(&data))      // Wczytuje linię
+        continue;              // Jeśli wczytano linię, kontynuuj*/
