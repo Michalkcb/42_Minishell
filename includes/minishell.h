@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
+/*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/22 16:02:23 by mbany            ###   ########.fr       */
+/*   Updated: 2024/12/27 16:39:58 by ltomasze         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,5 +60,26 @@ typedef struct s_data
    This function is a possible cancellation point and therefore not
    marked with __THROW.  */
 extern void perror (const char *__s);
+
+//libft
+size_t	ft_strlen(const char *s);
+int	ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_strdup(const char *s);
+size_t	ft_strlcpy(char *dst, const char *src, size_t size);
+int	ft_atoi(const char *nptr);
+char	*ft_itoa(int n);
+char	*ft_strchr(const char *s, int c);
+//envp
+void	free_envp(t_envp *head);
+t_envp	*fetch_envp_node(t_envp *head, char *key);
+void increment_shlvl(t_envp *head);
+t_envp *fetch_envp (char **envp);
+//signals
+void handle_sigint(int sig);
+void	handle_signals(void);
+//free
+void	free_ft_split(char **split);
+void	ft_free_commands(t_cmd **commands);
+
 
 #endif
