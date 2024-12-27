@@ -21,9 +21,6 @@ Ignoruje Ctrl+\\ (SIGQUIT).
 Zintegrowana z pętlą główną w miejscu, w którym jest używana.
 Program nadal powinien się kompilować i teraz prawidłowo obsługiwać Ctrl+C oraz Ctrl+\.
 
-
-<b>UNDER CONSTRUCTION</b>
-
 Krok 3: Wczytywanie linii wejściowej
 Napisz funkcję read_line, która:
 Wyświetla prompt i wczytuje linię z terminala (np. z użyciem readline).
@@ -32,6 +29,8 @@ Zwraca linię wejściową w strukturze t_data.
 Obsługa pustych linii:
 Jeśli linia jest pusta, pętla powinna kontynuować działanie bez dodatkowych akcji.
 Program po tym etapie wczytuje linie od użytkownika, dodaje je do historii i ignoruje puste wiersze.
+
+<b>UNDER CONSTRUCTION</b>
 
 Krok 4: Analiza składni i walidacja (parser)
 Funkcja check_syntax:
