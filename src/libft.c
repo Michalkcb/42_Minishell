@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 16:20:20 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/12/22 16:26:09 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/12/28 16:27:11 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ size_t	ft_strlen(const char *s)
 	while (s[i] != '\0')
 		i++;
 	return (i);
+}
+
+void	ft_putstr_fd(char *s, int fd)
+{
+	write(fd, s, ft_strlen(s));
 }
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
@@ -181,4 +186,40 @@ char	*ft_strchr(const char *s, int c)
 	if (c == '\0')
 		p = &s[i];
 	return ((char *)p);
+}
+char	*ft_strtrim(char const *s1, char const *set)
+{
+	size_t	start;
+	size_t	end;
+	char	*dest;
+
+	while (!s1)
+		return (0);
+	while (!set)
+		return ((char *)s1);
+	start = 0;
+	end = ft_strlen(s1) - 1;
+	while (s1[start] && ft_strchr(set, s1[start]))
+		start++;
+	while (s1[end] && ft_strchr(set, s1[end]) && end >= start)
+		end--;
+	dest = (char *)malloc(sizeof(char) * ((end - start + 1) + 1));
+	if (!dest)
+		return (0);
+	ft_strlcpy(dest, s1 + start, (end - start + 1) + 1);
+	return (dest);
+}
+
+int	ft_isalnum(int c)
+{
+	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'));
+}
+int	ft_isspace(char c)
+{
+	if (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r')
+	{
+		return (1);
+	}
+	return (0);
 }
