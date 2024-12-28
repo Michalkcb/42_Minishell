@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/27 16:39:58 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/12/28 16:23:41 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ typedef struct s_data
 /* errors */
 # define MANY_ARGS_ERR "Error: minishell does not accept arguments"
 # define NO_ENVP_ERR "Error: no environment found"
+# define MISS_QUOTE_ERR "Error: missing quote"
+# define MISS_CMD_ERR "Error: missing command"
 
 /* Standard file descriptors.  */
 #define	STDIN_FILENO	0	/* Standard input.  */
@@ -69,6 +71,13 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t size);
 int	ft_atoi(const char *nptr);
 char	*ft_itoa(int n);
 char	*ft_strchr(const char *s, int c);
+char	*ft_strtrim(char const *s1, char const *set);
+void	ft_putstr_fd(char *s, int fd);
+int	ft_isspace(char c);
+int	ft_isalnum(int c);
+
+
+
 //envp
 void	free_envp(t_envp *head);
 t_envp	*fetch_envp_node(t_envp *head, char *key);
@@ -80,6 +89,19 @@ void	handle_signals(void);
 //free
 void	free_ft_split(char **split);
 void	ft_free_commands(t_cmd **commands);
+
+//check_syntax
+int check_syntax(char *line);
+int check_if_line_is_empty(char *line);
+int check_for_unclosed_quotes(char *line);
+
+//error
+int	ft_error_message(char *str, int num);
+
+//utils
+void	go_to_next_quote(char *line, int *i, bool go_back);
+
+
 
 
 #endif
