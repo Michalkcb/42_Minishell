@@ -30,8 +30,6 @@ Obsługa pustych linii:
 Jeśli linia jest pusta, pętla powinna kontynuować działanie bez dodatkowych akcji.
 Program po tym etapie wczytuje linie od użytkownika, dodaje je do historii i ignoruje puste wiersze.
 
-<b>UNDER CONSTRUCTION</b>
-
 Krok 4: Analiza składni i walidacja (parser)
 Funkcja check_syntax:
 Sprawdza poprawność linii wejściowej:
@@ -39,6 +37,9 @@ Zamknięte cudzysłowy (np. " i ').
 Poprawne metaznaki (np. brak podwójnych ||, && bez kontekstu, itp.).
 Jeśli składnia jest niepoprawna, program powinien wyświetlać stosowny komunikat i kontynuować pracę.
 Jeśli składnia jest poprawna, linia jest przekazywana dalej.
+
+<b>UNDER CONSTRUCTION</b>
+
 Krok 5: Czyszczenie i normalizacja linii
 Zaimplementuj funkcję sanitaze_line, która:
 Usuwa nadmiarowe spacje i tabulatory.
