@@ -54,6 +54,7 @@ Tworzy strukturę reprezentującą komendy (np. lista poleceń z argumentami).
 Obsługuje różne typy metaznaków:
 Redirekcje (<, >, <<, >>).
 Potoki (|).
+
 Krok 7: Wykonywanie wbudowanych poleceń
 Dodaj funkcję check_for_builtins, która obsługuje polecenia:
 echo z flagą -n.
