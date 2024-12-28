@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:08:10 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/27 16:41:45 by ltomasze         ###   ########.fr       */
+/*   Updated: 2024/12/28 11:58:46 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,13 @@ int	main(int argc, char **argv, char **envp)
 		handle_signals();
 		if (read_line(&data))
 			continue ;
+		if (data.line && *data.line)
+			add_history(data.line);
+		if (check_syntax(data.line))
+		{
+			free(data.line);
+			continue;
+		}
 	}
 
 }
