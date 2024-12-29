@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:08:10 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/28 11:58:46 by mbany            ###   ########.fr       */
+/*   Updated: 2024/12/29 13:33:04 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	main(int argc, char **argv, char **envp)
 			free(data.line);
 			continue;
 		}
+		sanitize_line(&data);
 	}
 
 }
