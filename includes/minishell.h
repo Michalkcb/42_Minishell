@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/28 16:23:41 by mbany            ###   ########.fr       */
+/*   Updated: 2024/12/29 14:40:51 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,15 +47,17 @@ typedef struct s_data
 }	t_data;
 
 /* errors */
-# define MANY_ARGS_ERR "Error: minishell does not accept arguments"
+# define MANY_ARGS_ERR "Error: minishell doesn't accept arguments"
 # define NO_ENVP_ERR "Error: no environment found"
 # define MISS_QUOTE_ERR "Error: missing quote"
 # define MISS_CMD_ERR "Error: missing command"
+# define SANITIZE_ERROR "Error: line sanitize error"
 
 /* Standard file descriptors.  */
 #define	STDIN_FILENO	0	/* Standard input.  */
 #define	STDOUT_FILENO	1	/* Standard output.  */
 #define	STDERR_FILENO	2	/* Standard error output.  */
+
 
 /* Print a message describing the meaning of the value of errno.
 
@@ -97,9 +99,14 @@ int check_for_unclosed_quotes(char *line);
 
 //error
 int	ft_error_message(char *str, int num);
+void	msg_error(char *err);
+
 
 //utils
 void	go_to_next_quote(char *line, int *i, bool go_back);
+
+//sanitize
+void	sanitize_line(t_data *data);
 
 
 
