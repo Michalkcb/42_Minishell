@@ -40,6 +40,7 @@ Zamknięte cudzysłowy (np. " i ').
 Poprawne metaznaki (np. brak podwójnych ||, && bez kontekstu, itp.).
 Jeśli składnia jest niepoprawna, program powinien wyświetlać stosowny komunikat i kontynuować pracę.
 Jeśli składnia jest poprawna, linia jest przekazywana dalej.
+
 Krok 5: Czyszczenie i normalizacja linii
 Zaimplementuj funkcję sanitaze_line, która:
 Usuwa nadmiarowe spacje i tabulatory.
@@ -70,6 +71,7 @@ Funkcja execute_cmds, która:
 Wykonuje komendy zewnętrzne (np. ls, cat).
 Obsługuje potoki (|) poprzez tworzenie procesów potomnych.
 Obsługuje redirekcje wejścia/wyjścia (<, >).
+
 Krok 9: Zaawansowana obsługa sygnałów
 Rozbuduj obsługę sygnałów:
 Dostosuj SIGINT i SIGQUIT w procesach potomnych.
