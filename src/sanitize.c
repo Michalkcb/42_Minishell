@@ -6,11 +6,27 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 13:34:28 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/29 16:08:56 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/02 18:40:22 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+static int realloc_str_final(char **str_final,int j,int str_final_len)
+{
+	char *new_str;
+
+	new_str = malloc(sizeof(char) * (str_final_len * 2));
+	if (!new_str)
+	{
+		free(*str_final);
+		return (-1);
+	}
+	ft_strlcpy(new_str, *str_final, j);
+	free(*str_final);
+	*str_final = new_str;
+	return (str_final_len * 2);
+}
+
 
 char	*process_str(char *str, char *str_final, int str_final_len)
 {
