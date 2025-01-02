@@ -6,11 +6,35 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 13:34:28 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/02 18:40:22 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/02 19:22:23 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+// static int is_operator(char c)
+// {
+// 	if (c == '>' || c == '<' || c == '|')
+// 		return (1);
+// 	else
+// 		return (0);
+// }
+static int handle_quotes(char *str, char *str_final, int *i, int *j)
+{
+	int i_cp;
+
+	i_cp = *i;
+	go_to_next_quote(str, i, false);
+	(*i)++;
+	ft_strlcpy(&str_final[*j], &str[i_cp], *i - i_cp + 1);
+	*j += *i - i_cp;
+	if (is_operator(str[*i]))
+	{
+		str_final[*j] = ' ';
+		(*j)++;
+		str_final[*j] = '\0';
+	}
+}
+
 static int realloc_str_final(char **str_final,int j,int str_final_len)
 {
 	char *new_str;
