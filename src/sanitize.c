@@ -6,18 +6,18 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 13:34:28 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/02 19:22:23 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/02 19:23:08 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-// static int is_operator(char c)
-// {
-// 	if (c == '>' || c == '<' || c == '|')
-// 		return (1);
-// 	else
-// 		return (0);
-// }
+static int is_operator(char c)
+{
+	if (c == '>' || c == '<' || c == '|')
+		return (1);
+	else
+		return (0);
+}
 static int handle_quotes(char *str, char *str_final, int *i, int *j)
 {
 	int i_cp;
