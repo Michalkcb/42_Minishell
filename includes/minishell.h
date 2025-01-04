@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2024/12/29 14:40:51 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/04 12:13:18 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,15 @@ typedef struct s_data
 	char		*line;
 	int			cmd_exit_status;
 }	t_data;
+
+typedef struct s_token
+{
+	int type;
+	char*text;
+	struct s_token *next;
+	
+} t_token;
+
 
 /* errors */
 # define MANY_ARGS_ERR "Error: minishell doesn't accept arguments"
