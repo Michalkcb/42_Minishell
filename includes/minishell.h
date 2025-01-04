@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/04 13:40:09 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/04 16:51:28 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,21 @@ void	sanitize_line(t_data *data);
 
 //commands
 int	ft_commands_creation(t_data *data);
+t_cmd	*ft_commands(t_token *tokens);
+int	ft_command(t_token **cur_token, t_token *tokens, t_cmd **cur_command, t_cmd *cmds);
+
+
 
 //tokens
 t_token *ft_tokenizer(t_data *data, char *text);
+void	ft_free_tokens(t_token **tokens);
+int 	ft_is_chdir(char *inp,int i,t_token tokens);
+static int ft_add_redir(char *inp, int *i, t_token **tokens, char *str);
+
+//clean tokens
+int	ft_check_tokens(t_token **tokens);
+
+
 
 
 
