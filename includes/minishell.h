@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/04 12:58:26 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/04 13:40:09 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,9 @@ void	sanitize_line(t_data *data);
 
 //commands
 int	ft_commands_creation(t_data *data);
+
+//tokens
+t_token *ft_tokenizer(t_data *data, char *text);
 
 
 
