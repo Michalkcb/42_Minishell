@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 15:09:41 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 15:02:06 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/05 15:13:06 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,4 +209,33 @@ int	ft_check_for_dollar(char **word, t_data *data)
 			i++;
 	}
 	return (0);
+}
+/*
+Funkcja `ft_cross_word` przetwarza słowo, iterując po jego znakach. Jeśli natrafi na cudzysłów (pojedynczy lub podwójny), wywołuje funkcję `ft_clear_quote`, aby usunąć znaki cytatu. Jeśli napotka białe znaki (spacja, tabulator, itp.), wywołuje `ft_cut_token`, aby podzielić słowo na tokeny; jeśli zwróci błąd lub zakończy proces, odpowiednio przerywa działanie. W przypadku innych znaków po prostu przechodzi do następnego. Funkcja kończy się zwróceniem `1`, jeśli przetworzenie się powiodło.
+*/
+int	ft_cross_word(char **word, t_token **tokens)
+{
+	int	i;
+	int	value;
+
+	i = 0;
+	while ((*word)[i])
+	{
+		if ((*word)[i] == '\'' || (*word)[i] == '\"')
+		{
+			if (ft_clear_quote(&i, word, (*word)[i]) == -1)
+				return (-1);
+		}
+		else if (ft_strchr(" \t\r\n\v\f", (*word)[i]))
+		{
+			value = ft_cut_token(&i, word, tokens);
+			if (value == -1)
+				return (-1);
+			if (value == 0)
+				return (0);
+		}
+		else
+			i++;
+	}
+	return (1);
 }
