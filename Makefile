@@ -6,7 +6,7 @@
 #    By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/19 16:44:33 by ltomasze          #+#    #+#              #
-#    Updated: 2025/01/04 16:39:02 by mbany            ###   ########.fr        #
+#    Updated: 2025/01/05 11:33:53 by mbany            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iincludes -g
 SRCS = src/main.c src/libft.c src/envp.c src/signals.c src/free.c \
 src/check_syntax.c src/error.c src/utils.c src/sanitize.c src/commands.c \
-src/tokens.c src/tokens2.c src/clean_tokns.c
+src/tokens.c src/tokens2.c src/clean_toknes.c
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
