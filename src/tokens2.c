@@ -6,11 +6,12 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 15:09:41 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 11:34:47 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/05 15:02:06 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+static int	ft_single_redirection(char x, t_token **tokens, char *str);
 
 static int	ft_append_redir(char *input, int *i, t_token **tokens, char *str)
 {
@@ -57,14 +58,155 @@ int	ft_is_redir(char *input, int *i, t_token **tokens)
 	}
 	return (0);
 }
-
-ft_is_pipe(inp, &i, &tokens)
+/*
+Funkcja `ft_is_pipe` sprawdza, czy w danym miejscu ciągu wejściowego `input` (indeks wskazany przez `*i`) znajduje się znak `|`. Jeśli tak, kopiuje ten znak do nowo utworzonego ciągu `str` za pomocą `ft_strdup`, a następnie tworzy nowy token typu `T_PIPE`, przekazując go do listy tokenów za pomocą `create_token`. W przypadku błędów (np. brak pamięci podczas tworzenia `str` lub niepowodzenie w `create_token`), funkcja obsługuje błąd przez zwrócenie odpowiedniej wartości (`-1`). Gdy token zostanie utworzony pomyślnie, funkcja zwiększa indeks `*i` (pomija przetworzony znak w `input`) i zwraca `0`. Funkcja działa, by identyfikować znaki `|` jako operator rurociągu w procesie tokenizacji.
+*/
+int	ft_is_pipe(char *input, int *i, t_token **tokens)
 {
+	int		error;
+	char	*str;
 
+	if (input[*i] == '|')
+	{
+		str = ft_strdup("|");
+		if (!str)
+			return (ft_perror_message());
+		error = create_token(str, T_PIPE, tokens);
+		if (error == -1)
+		{
+			free(str);
+			return (-1);
+		}
+		(*i)++;
+	}
+	return (0);
 }
-ft_is_word(inp, &i, &tokens)
+/*
+Funkcja `ft_is_word` sprawdza, czy znak w ciągu wejściowym `input` na pozycji `*i` nie jest jednym ze znaków specjalnych `|`, `<`, `>` lub spacji. Jeśli warunek jest spełniony, wywołuje funkcję `ft_create_word_tok`, która tworzy token typu "słowo" i dodaje go do listy tokenów. W przypadku błędu w `ft_create_word_tok` funkcja zwalnia pamięć przydzieloną dla `input` i zwraca `-1`, aby zasygnalizować niepowodzenie. W przeciwnym razie funkcja zwraca `0`. Ma na celu identyfikację i tokenizację zwykłych słów w procesie analizy leksykalnej wejścia.*/
+int	ft_is_word(char *input, int *i, t_token **tokens, t_data *data)
 {
-	
+	if (!(ft_strchr("| <>", input[*i])))
+	{
+		if (ft_create_word_tok(input, i, tokens, data) == -1)
+		{
+			free(input);
+			return (-1);
+		}
+	}
+	return (0);
 }
+/*
+Funkcja `ft_single_redirection` obsługuje pojedyncze znaki przekierowań wejścia (`<`) lub wyjścia (`>`), tworząc odpowiedni token. Na podstawie znaku `x` przypisuje odpowiedni typ (`T_IN_REDIR` lub `T_OUT_REDIR`) oraz kopiuje znak do nowego łańcucha za pomocą `ft_strdup`. Następnie wywołuje `create_token`, aby dodać nowy token do listy `tokens`. Funkcja zwraca `0` w przypadku powodzenia lub `-1`, jeśli wystąpi błąd (np. brak pamięci). Jej celem jest poprawne rozpoznawanie i dodawanie tokenów dla operatorów przekierowań w analizatorze leksykalnym.
+*/
+static int	ft_single_redirection(char x, t_token **tokens, char *str)
+{
+	int	type;
+	int	error;
 
+	if (x == '<')
+	{
+		type = T_IN_REDIR;
+		str = ft_strdup("<");
+	}
+	else
+	{
+		type = T_OUT_REDIR;
+		str = ft_strdup(">");
+	}
+	if (!str)
+		return (ft_perror_message());
+	error = create_token(str, type, tokens);
+	if (error == -1)
+	{
+		free(str);
+		return (-1);
+	}
+	return (0);
+}
+/*
+Funkcja `ft_create_word_tok` tworzy token reprezentujący słowo w ciągu wejściowym `str`, zaczynając od pozycji `*i`. Oblicza długość słowa `n`, uwzględniając sekwencje znaków wewnątrz pojedynczych (`'`) i podwójnych (`"`) cudzysłowów, oraz ignoruje spacje jako separatory. Gdy długość słowa zostanie wyznaczona, wyodrębnia jego treść i tworzy odpowiedni token za pomocą `ft_extract_word`. Po zakończeniu aktualizuje wartość `*i`, przesuwając wskaźnik na koniec przetworzonego słowa. Funkcja zwraca `0` w przypadku sukcesu lub `-1`, gdy wystąpi błąd. Celem jest poprawne przetwarzanie słów w analizatorze leksykalnym.
+*/
 
+int	ft_create_word_tok(char *str, int *i, t_token **tokens, t_data *data)
+{
+	int	n;
+
+	n = 0;
+	while (str[*i + n] && str[*i + n] != ' ')
+	{
+		if (str[*i + n] == '\'')
+			ft_skip_sq(&n, &str[*i]);
+		else if (str[*i + n] == '\"')
+		{
+			n++;
+			while (str[*i + n] && str[*i + n] != '\"')
+				n++;
+			n++;
+		}
+		else
+		{
+			while (str[*i + n] && !ft_strchr("\"\' ", str[*i + n]))
+				n++;
+		}
+	}
+	if (ft_extract_word(&str[*i], &n, tokens, data) == -1)
+		return (-1);
+	*i = *i + n;
+	return (0);
+}
+/*
+Funkcja `ft_extract_word` tworzy nowy token typu słowo (T_WORD) na podstawie ciągu znaków `str` o długości `*n`, alokując pamięć na nowy ciąg `word` i kopiując do niego odpowiedni fragment. Następnie sprawdza obecność symbolu `$` za pomocą `ft_check_for_dollar`, a później przetwarza słowo funkcją `ft_cross_word`. Jeśli żadna z tych operacji nie zwróci błędu, tworzy nowy token i dodaje go do listy `tokens`. Funkcja umożliwia rozdzielanie słów na tokeny przy analizie leksykalnej, z uwzględnieniem zmiennych środowiskowych i specjalnych modyfikacji.
+*/
+int	ft_extract_word(char *str, int *n, t_token **tokens, t_data *data)
+{
+	char	*word;
+	int		value;
+
+	word = malloc(sizeof(char) * (*n + 1));
+	if (!word)
+		return (ft_perror_message());
+	ft_strlcpy(word, str, (*n) + 1);
+	if (ft_check_for_dollar(&word, data) == -1)
+		return (-1);
+	value = ft_cross_word(&word, tokens);
+	if (value == -1)
+	{
+		free(word);
+		return (-1);
+	}
+	else if (value == 0)
+		return (0);
+	if (create_token(word, T_WORD, tokens) == -1)
+	{
+		free(word);
+		return (-1);
+	}
+	return (0);
+}
+/*
+Funkcja `ft_check_for_dollar` analizuje zawartość ciągu `*word` w poszukiwaniu znaków specjalnych: pojedynczych apostrofów (`'`), znaku dolara (`$`), oraz podwójnych cudzysłowów (`"`). W przypadku znalezienia: pomija zawartość w apostrofach, przetwarza zmienne środowiskowe za pomocą `ft_dollar`, oraz interpretuje zawartość w cudzysłowach przez `ft_cross_dq`. Funkcja modyfikuje zawartość `*word` zgodnie z kontekstem, zwracając -1 w razie błędu. Jej celem jest przetwarzanie i rozwiązywanie zmiennych środowiskowych i specjalnych sekwencji w analizowanym tekście.
+*/
+int	ft_check_for_dollar(char **word, t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while ((*word)[i])
+	{
+		if ((*word)[i] == '\'')
+			ft_skip_sq(&i, *word);
+		else if ((*word)[i] == '$')
+		{
+			if (ft_dollar(&i, word, data) == -1)
+				return (-1);
+		}
+		else if ((*word)[i] == '\"')
+		{
+			if (ft_cross_dq (&i, word, data) == -1)
+				return (-1);
+		}
+		else
+			i++;
+	}
+	return (0);
+}
