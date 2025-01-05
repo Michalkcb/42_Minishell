@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 13:23:35 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/05 15:43:04 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,13 @@ typedef struct s_token
 } t_token;
 
 //tokens
+# define T_OUT_REDIR	1 
+# define T_IN_REDIR		2
+# define T_APPEND		3
 # define T_HEREDOC 4
 # define T_PIPE 5
 # define T_WORD 6
+# define T_ARG 7
 
 
 /* errors */
@@ -67,6 +71,8 @@ typedef struct s_token
 # define MISS_CMD_ERR "Error: missing command"
 # define SANITIZE_ERROR "Error: line sanitize error"
 # define REDIR_TO_OPR "Syntax error: redirection followed bu unexpected token"
+# define NULL_REDIR "Error: ambiguous redirect"
+
 
 /* Standard file descriptors.  */
 #define	STDIN_FILENO	0	/* Standard input.  */
@@ -116,6 +122,7 @@ int check_for_unclosed_quotes(char *line);
 int	ft_error_message(char *str, int num);
 void	msg_error(char *err);
 int	ft_perror_message(void);
+int	ft_perror_free(char *first, char *second, char *third);
 
 
 
@@ -132,20 +139,38 @@ t_cmd	*ft_commands(t_token *tokens);
 int	ft_command(t_token **cur_token, t_token *tokens, t_cmd **cur_command, t_cmd *cmds);
 int	ft_redir(t_token **current_tok, t_token *head_tok,t_cmd **current_cmd, t_cmd *head_cmd);
 int ft_pipe(t_token **current_token,t_token *tokens, t_cmd **current_cmd,t_cmd *commands);
+// static int	ft_count_tok(t_token *tokens);
 
 
-
-
+//cmd_redir.c
+int		ft_set_redir(t_token **current_tok, t_cmd *current_cmd);
 
 //tokens
 t_token *ft_tokenizer(t_data *data, char *inp);
 void	ft_free_tokens(t_token **tokens);
 int	ft_is_redir(char *input, int *i, t_token **tokens);
+int	ft_is_pipe(char *input, int *i, t_token **tokens);
+int	ft_is_word(char *input, int *i, t_token **tokens, t_data *data);
+int	create_token(char *str, int type, t_token **tokens);
+// static int	ft_single_redirection(char x, t_token **tokens, char *str);
+int		ft_create_word_tok(char *str, int *i, t_token **tokens, t_data *data);
+void	ft_skip_sq(int *n, char *str);
+int	ft_extract_word(char *str, int *n, t_token **tokens, t_data *data);
+int	ft_check_for_dollar(char **word, t_data *data);
+int	ft_cross_word(char **word, t_token **tokens);
+int	ft_cross_dq(int *i, char **word, t_data *data);
+int	ft_clear_quote(int *i, char **word, char del);
+int	ft_cut_token(int *i, char **word, t_token **tokens);
 // static int	ft_append_redir(char *input, int *i, t_token **tokens, char *str);
 
 
 //clean tokens
 int	ft_check_tokens(t_token **tokens);
+// static int	ft_remove_empty_tokens(t_token **tokens);
+
+
+//dollar
+int	ft_dollar(int *i, char **word, t_data *data);
 
 
 
