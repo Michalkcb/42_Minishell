@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 14:49:12 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 15:16:48 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/05 15:18:48 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@ int	ft_cross_dq(int *i, char **word, t_data *data)
 	(*i)++;
 	return (0);
 }
+/*
+Funkcja `ft_clear_quote` usuwa cudzysłowy (jedno- lub podwójne) z ciągu znaków, zaczynając od pozycji `i`. Szuka pozycji zamykającego cudzysłowu i tworzy nowy ciąg znaków bez tego cudzysłowa. Zmienna `new_word` jest alokowana na nową wersję ciągu, w której fragment przed i po cudzysłowie jest kopiowany, pomijając sam znak cytatu. Po zakończeniu alokacji i kopiowania pamięci, pierwotny ciąg `*word` jest zwalniany, a wskaźnik `*word` jest aktualizowany na nowo stworzoną wersję. Funkcja zwraca `0` po udanym przetworzeniu, a w przypadku błędu alokacji wywołuje `ft_perror_message`.
+*/
 
 int	ft_clear_quote(int *i, char **word, char del)
 {
