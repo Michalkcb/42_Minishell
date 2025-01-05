@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 13:18:14 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/05 13:23:35 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,8 @@ int check_for_unclosed_quotes(char *line);
 //error
 int	ft_error_message(char *str, int num);
 void	msg_error(char *err);
+int	ft_perror_message(void);
+
 
 
 //utils
@@ -129,6 +131,8 @@ int	ft_commands_creation(t_data *data);
 t_cmd	*ft_commands(t_token *tokens);
 int	ft_command(t_token **cur_token, t_token *tokens, t_cmd **cur_command, t_cmd *cmds);
 int	ft_redir(t_token **current_tok, t_token *head_tok,t_cmd **current_cmd, t_cmd *head_cmd);
+int ft_pipe(t_token **current_token,t_token *tokens, t_cmd **current_cmd,t_cmd *commands);
+
 
 
 
