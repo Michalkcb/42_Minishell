@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 13:34:28 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/02 19:45:37 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/02 19:47:42 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,11 @@ static void handle_quotes(char *str, char *str_final, int *i, int *j)
 	}
 }
 
-
+static void handle_operators(const char *str, char *str_final, int *i, int *j)
+{
+	str_final[(*j)++] = str[(*i)++];
+	str_final[(*j)++] = ' ';
+}
 
 static int realloc_str_final(char **str_final,int j,int str_final_len)
 {

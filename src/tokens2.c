@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 15:09:41 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 15:13:06 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/05 15:21:20 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,5 +237,36 @@ int	ft_cross_word(char **word, t_token **tokens)
 		else
 			i++;
 	}
+	return (1);
+}
+
+/*
+Funkcja `ft_cut_token` przetwarza słowo, tworząc jego token. Zaczyna od alokacji pamięci na nowy ciąg znaków `tok_str` i kopiuje część `*word` do tego ciągu. Następnie wywołuje `create_token`, by utworzyć token typu `T_WORD`. Jeśli to się nie uda, zwraca błąd i zwalnia pamięć. Następnie funkcja ignoruje białe znaki, aż napotka kolejny token lub koniec słowa. Jeśli nie ma więcej znaków, zwalnia pamięć i kończy. Jeśli napotka kolejne znaki, alokuje nową pamięć dla reszty słowa, kopiuje ją do `new_word`, aktualizuje `*word`, a indeks `i` ustawia na 0, by przetwarzać nowe słowo. Funkcja zwraca `1`, gdy słowo jest kontynuowane, lub `0`, gdy nie ma nic więcej do przetworzenia.
+*/
+int	ft_cut_token(int *i, char **word, t_token **tokens)
+{
+	char	*tok_str;
+	char	*new_word;
+
+	tok_str = malloc(sizeof(char) * (*i + 1));
+	if (!tok_str)
+		return (ft_perror_message());
+	ft_strlcpy(tok_str, *word, *i + 1);
+	if (create_token(tok_str, T_WORD, tokens) == -1)
+		return (ft_perror_free(tok_str, NULL, NULL));
+	while ((*word)[*i] && ft_strchr(" \t\r\n\v\f", (*word)[*i]))
+		(*i)++;
+	if (!(*word)[*i])
+	{
+		free(*word);
+		return (0);
+	}
+	new_word = malloc(sizeof(char) * (ft_strlen(&(*word)[*i]) + 1));
+	if (!new_word)
+		return (ft_perror_message());
+	ft_strlcpy(new_word, &(*word)[*i], (ft_strlen(&(*word)[*i]) + 1));
+	free(*word);
+	*word = new_word;
+	*i = 0;
 	return (1);
 }
