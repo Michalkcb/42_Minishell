@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 15:43:04 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/05 15:45:47 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,8 @@ int	ft_cut_token(int *i, char **word, t_token **tokens);
 //clean tokens
 int	ft_check_tokens(t_token **tokens);
 // static int	ft_remove_empty_tokens(t_token **tokens);
+//static void	ft_remove_token(t_token **head, t_token **to_del, t_token **prev);
+
 
 
 //dollar
