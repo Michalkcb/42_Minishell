@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:27:24 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/07 19:26:31 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/07 19:28:38 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,14 @@ static void	ft_append_cmd(t_cmd *current_cmd, char *str)
 		free(current_cmd->outfile);
 	current_cmd->outfile = str;
 	current_cmd->append = true;
+}
+/*
+Funkcja `ft_here_doc_cmd` ustawia w strukturze `current_cmd` plik wejściowy na `str`, zwalniając wcześniej zajmowaną pamięć przez poprzedni plik wejściowy, jeśli istniał, oraz oznacza, że używane jest polecenie typu here document, ustawiając flagę `here_doc` na `true`.
+*/
+static void	ft_here_doc_cmd(t_cmd *current_cmd, char *str)
+{
+	if (current_cmd->infile)
+		free(current_cmd->infile);
+	current_cmd->infile = str;
+	current_cmd->here_doc = true;
 }
