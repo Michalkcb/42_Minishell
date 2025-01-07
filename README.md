@@ -1,6 +1,5 @@
 42 Warsaw Minishell project <br><br>
 
-
 <b>DONE</b><br>
 
 Krok 1: Podstawowe struktury i inicjalizacja projektu
