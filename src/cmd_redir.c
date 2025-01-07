@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:27:24 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/07 18:48:50 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/07 18:52:05 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int ft_set_redir(t_token **current_tok, t_cmd *current_cmd)
 	if ((*current_tok)->type == T_IN_REDIR)
 		ft_redir_in_cmd(current_cmd, str);
 	if ((*current_tok)->type == T_OUT_REDIR)
-		ft_redir_in_cmd(current_cmd, str);
+		ft_redir_out_cmd(current_cmd, str);
 	if ((*current_tok)->type == T_APPEND)
 		ft_append_cmd(current_cmd, str);
 	if ((*current_tok)->type == T_HEREDOC)
@@ -49,4 +49,25 @@ static void	ft_redir_in_cmd(t_cmd *current_cmd, char *str)
 		free(current_cmd->infile);
 	current_cmd->infile = str;
 	current_cmd->here_doc = false;
+}
+/*
+Funkcja `ft_redir_out_cmd` ustawia plik wyjściowy dla polecenia w strukturze `t_cmd`. Próbuje otworzyć plik `str` w trybie zapisu, tworząc go, jeśli nie istnieje, i usuwając jego zawartość, jeśli istnieje. Jeśli operacja otwarcia zakończy się niepowodzeniem, wypisuje komunikat błędu, ustawia flagę błędu redirekcji `redir_error` i zwalnia pamięć dla `str`. Jeśli otwarcie się powiedzie, zamyka deskryptor pliku, zwalnia ewentualny poprzedni plik wyjściowy, przypisuje nowy do `outfile` i ustawia `append` na `false`, aby wskazać, że dane mają być nadpisywane.
+*/
+static void	ft_redir_out_cmd(t_cmd *current_cmd, char *str)
+{
+	int	fd;
+
+	fd = open(str, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	if (fd < 0)
+	{
+		ft_perror_message();
+		current_cmd->redir_error = true;
+		free(str);
+		return ;
+	}
+	close(fd);
+	if (current_cmd->outfile)
+		free(current_cmd->outfile);
+	current_cmd->outfile = str;
+	current_cmd->append = false;
 }
