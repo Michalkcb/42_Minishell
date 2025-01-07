@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:27:24 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/07 18:52:05 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/07 19:26:31 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int ft_set_redir(t_token **current_tok, t_cmd *current_cmd)
 
 	if(current_cmd->redir_error == true)
 		return (0);
+	str = ft_strdup((*current_tok)->next->text);
 	if (!str)
 		return (ft_perror_message());
 	if ((*current_tok)->type == T_IN_REDIR)
@@ -70,4 +71,25 @@ static void	ft_redir_out_cmd(t_cmd *current_cmd, char *str)
 		free(current_cmd->outfile);
 	current_cmd->outfile = str;
 	current_cmd->append = false;
+}
+/*
+Funkcja `ft_append_cmd` otwiera plik `str` w trybie dopisywania (O_APPEND) lub tworzy go, jeśli nie istnieje (O_CREAT). Jeśli otwarcie się nie powiedzie, ustawia flagę błędu przekierowania w strukturze `current_cmd`, wyświetla komunikat błędu i zwalnia pamięć dla `str`. W przeciwnym razie zamyka plik, aktualizuje wskaźnik `outfile` w `current_cmd` do nowego pliku `str` i ustawia tryb dopisywania (`append`) na `true`.
+*/
+static void	ft_append_cmd(t_cmd *current_cmd, char *str)
+{
+	int	fd;
+
+	fd = open(str, O_WRONLY | O_APPEND | O_CREAT, 0644);
+	if (fd < 0)
+	{
+		ft_perror_message();
+		current_cmd->redir_error = true;
+		free(str);
+		return ;
+	}
+	close(fd);
+	if (current_cmd->outfile)
+		free(current_cmd->outfile);
+	current_cmd->outfile = str;
+	current_cmd->append = true;
 }
