@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 15:45:47 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/07 19:41:34 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -64,7 +65,7 @@ typedef struct s_token
 # define T_ARG 7
 
 
-/* errors */
+// errors
 # define MANY_ARGS_ERR "Error: minishell doesn't accept arguments"
 # define NO_ENVP_ERR "Error: no environment found"
 # define MISS_QUOTE_ERR "Error: missing quote"
@@ -74,10 +75,15 @@ typedef struct s_token
 # define NULL_REDIR "Error: ambiguous redirect"
 
 
-/* Standard file descriptors.  */
+// Standard file descriptors.
 #define	STDIN_FILENO	0	/* Standard input.  */
 #define	STDOUT_FILENO	1	/* Standard output.  */
 #define	STDERR_FILENO	2	/* Standard error output.  */
+
+//permissions to file
+# define READ			1
+# define WRITE			2
+# define EXECUTE		3
 
 
 /* Print a message describing the meaning of the value of errno.
@@ -98,6 +104,7 @@ char	*ft_strtrim(char const *s1, char const *set);
 void	ft_putstr_fd(char *s, int fd);
 int	ft_isspace(char c);
 int	ft_isalnum(int c);
+int	ft_isalpha(int c);
 
 
 
@@ -128,6 +135,7 @@ int	ft_perror_free(char *first, char *second, char *third);
 
 //utils
 void	go_to_next_quote(char *line, int *i, bool go_back);
+int	ft_check_access(char *file, int type);
 
 //sanitize
 void	sanitize_line(t_data *data);
@@ -173,6 +181,12 @@ int	ft_check_tokens(t_token **tokens);
 
 //dollar
 int	ft_dollar(int *i, char **word, t_data *data);
+//static int	ft_valid_dollar(int *i, char *word, char **var);
+//static int	ft_expand_var(char *var, t_envp *env, char **word, int *i)
+
+//buildin.c
+void	exit_bltin(t_data *data);
+
 
 
 
