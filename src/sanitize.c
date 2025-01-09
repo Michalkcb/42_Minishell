@@ -6,11 +6,28 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 13:34:28 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/02 19:47:42 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/09 20:05:55 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
+/*
+Funkcja `optimize_str_final` tworzy nową kopię łańcucha znaków `str_final` za pomocą `ft_strdup`, zwalnia pamięć zajmowaną przez oryginalny łańcuch i zwraca wskaźnik do nowej kopii. Służy do zarządzania pamięcią, aby zastąpić oryginalny wskaźnik nowym, niezależnym łańcuchem znaków.
+*/
+static char	*optimize_str_final(char *str_final)
+{
+	char	*new_str;
+
+	if (!str_final)
+		return (NULL);
+	new_str = ft_strdup(str_final);
+	free(str_final);
+	if (!new_str)
+		return (NULL);
+	return (new_str);
+}
+
 static int is_operator(char c)
 {
 	if (c == '>' || c == '<' || c == '|')
@@ -40,7 +57,9 @@ static void handle_operators(const char *str, char *str_final, int *i, int *j)
 	str_final[(*j)++] = str[(*i)++];
 	str_final[(*j)++] = ' ';
 }
-
+/*
+Funkcja `realloc_str_final` zwiększa dwukrotnie rozmiar bufora `str_final`, aby pomieścić więcej danych. Tworzy nowy, większy bufor, kopiuje dotychczasową zawartość do nowego bufora, zwalnia stary bufor i aktualizuje wskaźnik. W przypadku błędu alokacji pamięci zwraca `-1`, a przy sukcesie zwraca nową długość bufora. Używana jest do dynamicznego zarządzania pamięcią dla rosnącego ciągu.
+*/
 static int realloc_str_final(char **str_final,int j,int str_final_len)
 {
 	char *new_str;
@@ -57,7 +76,9 @@ static int realloc_str_final(char **str_final,int j,int str_final_len)
 	return (str_final_len * 2);
 }
 
-
+/*
+Funkcja `process_str` przetwarza wejściowy ciąg znaków `str` i zapisuje zaktualizowaną wersję w `str_final`. Iteruje przez `str`, pomijając zbędne spacje i tabulatory oraz obsługując specjalne przypadki, takie jak cudzysłowy (`handle_quotes`) i operatory (`handle_operators`). Jeśli bufor `str_final` staje się za mały, jego rozmiar jest zwiększany za pomocą `realloc_str_final`. Funkcja kończy przetwarzanie, dodając znak null (`\0`) na końcu ciągu i zwracając wynik. Jej celem jest normalizacja i interpretacja wejściowego ciągu znaków w kontekście składni poleceń.
+*/
 char	*process_str(char *str, char *str_final, int str_final_len)
 {
 	int i;
@@ -82,7 +103,9 @@ char	*process_str(char *str, char *str_final, int str_final_len)
 	str_final[j] = '\0';
 	return (str_final);
 }
-
+/*
+Funkcja `sanitize_line` czyści wprowadzoną linię tekstu w strukturze `data` poprzez usunięcie początkowych i końcowych spacji oraz tabulatorów za pomocą `ft_strtrim`, tworzy dynamicznie pamięć na zaktualizowany łańcuch o podwójnej długości, przetwarza ten łańcuch za pomocą `process_str`, a następnie optymalizuje go przy użyciu `optimize_str_final`. W razie błędów (np. alokacji pamięci) wyświetla komunikat o błędzie i zwalnia zajętą pamięć. Funkcja służy do przygotowania wprowadzonego tekstu do dalszego przetwarzania.
+*/
 void	sanitize_line(t_data *data)
 {
 	char *str;
@@ -101,7 +124,7 @@ void	sanitize_line(t_data *data)
 		return ;
 	}
 	data->line = process_str(str, data->line, str_len);
-	//data->line = optimize_str_final(data->line);
+	data->line = optimize_str_final(data->line);
 	if(!data->line)
 	{
 		free(str);
