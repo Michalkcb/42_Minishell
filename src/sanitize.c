@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 13:34:28 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/09 20:05:55 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/11 15:15:13 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,9 @@ static char	*optimize_str_final(char *str_final)
 		return (NULL);
 	return (new_str);
 }
-
+/*
+Funkcja `is_operator` sprawdza, czy znak `c` jest jednym z operatorów (`>`, `<`, `|`). Jeśli tak, zwraca `1`; w przeciwnym razie zwraca `0`. Służy do rozpoznawania operatorów w analizowanym tekście.
+*/
 static int is_operator(char c)
 {
 	if (c == '>' || c == '<' || c == '|')
@@ -35,6 +37,9 @@ static int is_operator(char c)
 	else
 		return (0);
 }
+/*
+Funkcja `handle_quotes` przetwarza ciągi ujęte w cudzysłowy w łańcuchu `str`. Ustala początek (`i_cp`) i koniec cudzysłowu, kopiując jego zawartość do `str_final`. Następnie aktualizuje pozycje wskaźników `i` i `j`. Jeśli znak po cudzysłowie jest operatorem, dodaje spację do `str_final`, aby oddzielić operator od reszty tekstu. Funkcja pomaga obsługiwać poprawne przetwarzanie cudzysłowów w wejściowych danych.
+*/
 static void handle_quotes(char *str, char *str_final, int *i, int *j)
 {
 	int i_cp;
@@ -51,7 +56,9 @@ static void handle_quotes(char *str, char *str_final, int *i, int *j)
 		str_final[*j] = '\0';
 	}
 }
-
+/*
+Funkcja `handle_operators` kopiuje operator z `str` do `str_final`, przesuwając wskaźniki `i` i `j`, a następnie dodaje spację po operatorze. Ułatwia to poprawne rozdzielanie operatorów w analizowanym ciągu znaków.
+*/
 static void handle_operators(const char *str, char *str_final, int *i, int *j)
 {
 	str_final[(*j)++] = str[(*i)++];
