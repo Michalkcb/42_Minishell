@@ -6,12 +6,15 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:07:38 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/07 19:15:59 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/11 15:11:37 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*
+Funkcja `go_to_next_quote` znajduje pozycję następnego lub poprzedniego wystąpienia cudzysłowu w łańcuchu `line`, w zależności od wartości `go_back`. Jeśli `go_back` jest `false`, przeszukuje ciąg do przodu, a jeśli `true`, przeszukuje do tyłu. Zapisuje nową pozycję cudzysłowu w wskaźniku `i`. Funkcja obsługuje identyfikację par cudzysłowów w tekście.
+*/
 void	go_to_next_quote(char *line, int *i, bool go_back)
 {
 	char	quote;
