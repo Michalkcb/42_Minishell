@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 15:09:41 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 15:21:20 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/11 16:11:04 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,9 @@ static int	ft_append_redir(char *input, int *i, t_token **tokens, char *str)
 	}
 	*i = *i + 2;
 	return (0);
-}
-
+}/*
+Funkcja `ft_is_redir` sprawdza, czy znak w łańcuchu `input` pod indeksem `*i` to znak redirekcji (`<` lub `>`). W przypadku podwójnego znaku redirekcji (`<<` lub `>>`) wywołuje `ft_append_redir`, tworząc odpowiedni token. W przypadku pojedynczej redirekcji tworzy token za pomocą `ft_single_redirection` i przesuwa indeks `*i`. W razie błędu zwraca `-1`, a w przeciwnym razie `0`, pozwalając kontynuować analizę tokenów. Funkcja identyfikuje redirekcje i dodaje je do listy tokenów.
+*/
 int	ft_is_redir(char *input, int *i, t_token **tokens)
 {
 	int		error;
