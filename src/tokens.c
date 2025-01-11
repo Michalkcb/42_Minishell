@@ -6,12 +6,15 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 13:24:27 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 14:32:29 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/11 16:08:25 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*
+Funkcja `ft_tokenizer` przetwarza ciąg znaków `inp`, zamieniając go na listę tokenów (`t_token`). Iteracyjnie analizuje wejście, identyfikując i tworząc tokeny dla redirekcji, potoków oraz słów za pomocą funkcji pomocniczych (`ft_is_redir`, `ft_is_pipe`, `ft_is_word`). W przypadku błędu przerywa działanie i zwalnia pamięć tokenów. Pomija spacje w wejściu i, jeśli analiza przebiegnie poprawnie, zwraca listę tokenów. Dodatkowo zwalnia pamięć pierwotnej linii w `data->line`, aby uniknąć wycieków pamięci.
+*/
 t_token *ft_tokenizer(t_data *data, char *inp)
 {
 	int i;
