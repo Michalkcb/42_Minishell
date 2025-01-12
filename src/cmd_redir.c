@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 13:27:24 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/07 19:28:38 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/12 13:57:49 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@ static void	ft_here_doc_cmd(t_cmd *current_cmd, char *str);
 static void	ft_append_cmd(t_cmd *current_cmd, char *str);
 static void	ft_redir_out_cmd(t_cmd *current_cmd, char *str);
 static void	ft_redir_in_cmd(t_cmd *current_cmd, char *str);
-
+/*
+Funkcja `ft_set_redir` ustawia odpowiednią redirekcję w bieżącym poleceniu na podstawie typu tokenu. Jeśli w poleceniu wystąpił wcześniej błąd redirekcji, nic nie robi. Tworzy kopię tekstu z następnego tokenu (ścieżka do pliku lub znak redirekcji) i w zależności od typu bieżącego tokenu (`T_IN_REDIR`, `T_OUT_REDIR`, `T_APPEND`, `T_HEREDOC`), wywołuje odpowiednią funkcję (`ft_redir_in_cmd`, `ft_redir_out_cmd`, `ft_append_cmd`, `ft_here_doc_cmd`) w celu ustawienia redirekcji w strukturze `t_cmd`. W razie problemu z alokacją pamięci zwraca błąd.
+*/
 int ft_set_redir(t_token **current_tok, t_cmd *current_cmd)
 {
 	char *str;

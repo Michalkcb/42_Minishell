@@ -6,14 +6,16 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 13:46:10 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 15:46:31 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/12 12:55:01 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 static int	ft_rm_empty_tokens(t_token **tokens);
 static void	ft_remove_token(t_token **head, t_token **to_del, t_token **prev);
-
+/*
+Funkcja `ft_check_tokens` usuwa puste tokeny z listy tokenów za pomocą `ft_rm_empty_tokens`, a jeśli operacja się nie powiedzie (zwraca -1), zwalnia całą listę tokenów funkcją `ft_free_tokens` i zwraca -1. W przeciwnym razie funkcja kończy działanie sukcesem, zwracając 0. Ma na celu upewnienie się, że lista tokenów jest poprawna i wolna od pustych elementów.
+*/
 int	ft_check_tokens(t_token **tokens)
 {
 	if (ft_rm_empty_tokens(tokens) == -1)

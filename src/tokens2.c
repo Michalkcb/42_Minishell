@@ -6,13 +6,15 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 15:09:41 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/11 16:11:04 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/12 15:12:15 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 static int	ft_single_redirection(char x, t_token **tokens, char *str);
-
+/*
+Funkcja `ft_append_redir` sprawdza, czy znak w `input[*i]` to znak `<` lub `>`, a następnie przypisuje do zmiennej `str` odpowiednią wartość `"<<"` lub `">>"`. Jeśli alokacja pamięci dla `str` nie powiedzie się, zwraca błąd. Funkcja tworzy token dla typu `T_HEREDOC` lub `T_APPEND` za pomocą funkcji `create_token`, a następnie przesuwa indeks `*i` o 2. Jeśli wystąpi błąd podczas tworzenia tokenu, zwraca `-1`. Celem funkcji jest obsługa różnych rodzajów redirekcji (`<<` lub `>>`).
+*/
 static int	ft_append_redir(char *input, int *i, t_token **tokens, char *str)
 {
 	int	error;
@@ -34,7 +36,8 @@ static int	ft_append_redir(char *input, int *i, t_token **tokens, char *str)
 	}
 	*i = *i + 2;
 	return (0);
-}/*
+}
+/*
 Funkcja `ft_is_redir` sprawdza, czy znak w łańcuchu `input` pod indeksem `*i` to znak redirekcji (`<` lub `>`). W przypadku podwójnego znaku redirekcji (`<<` lub `>>`) wywołuje `ft_append_redir`, tworząc odpowiedni token. W przypadku pojedynczej redirekcji tworzy token za pomocą `ft_single_redirection` i przesuwa indeks `*i`. W razie błędu zwraca `-1`, a w przeciwnym razie `0`, pozwalając kontynuować analizę tokenów. Funkcja identyfikuje redirekcje i dodaje je do listy tokenów.
 */
 int	ft_is_redir(char *input, int *i, t_token **tokens)

@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 13:24:27 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/11 16:08:25 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/12 14:59:00 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ t_token *ft_tokenizer(t_data *data, char *inp)
 	data->line = NULL;
 	return (tokens);
 }
+/*
+Funkcja `ft_free_tokens` zwalnia pamięć przydzieloną dla listy tokenów. Działa poprzez iterację po wszystkich tokenach, zwalniając pamięć dla ich tekstu, a następnie same tokeny, aż do wyczerpania listy. Na końcu ustawia wskaźnik na początek listy na `NULL`, aby zapobiec dostępowi do już zwolnionej pamięci. Funkcja najpierw sprawdza, czy lista nie jest pusta przed jej przetwarzaniem.
+*/
 void	ft_free_tokens(t_token **tokens)
 {
 	t_token	*temp;
