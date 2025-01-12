@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/07 19:41:34 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/11 17:01:51 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ typedef struct s_token
 # define T_OUT_REDIR	1 
 # define T_IN_REDIR		2
 # define T_APPEND		3
-# define T_HEREDOC 4
-# define T_PIPE 5
-# define T_WORD 6
-# define T_ARG 7
+# define T_HEREDOC		4
+# define T_PIPE			5
+# define T_WORD			6
+# define T_ARG			7
 
 
 // errors
@@ -185,7 +185,7 @@ int	ft_dollar(int *i, char **word, t_data *data);
 //static int	ft_expand_var(char *var, t_envp *env, char **word, int *i)
 
 //buildin.c
-void	exit_bltin(t_data *data);
+//void	exit_bltin(t_data *data);
 
 
 
