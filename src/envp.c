@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 16:38:07 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/12/27 15:01:20 by ltomasze         ###   ########.fr       */
+/*   Updated: 2025/01/14 20:02:06 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,4 +103,29 @@ t_envp *fetch_envp (char **envp)
 		envp++;
 	}
 	return (envp_head);
+}
+/*
+Funkcja `append_envp_node` dodaje nowy węzeł do listy jednokierunkowej typu `t_envp` (prawdopodobnie lista przechowująca zmienne środowiskowe). Działa to tak, że zaczyna od głowy listy (`*head`), przeszukuje ją, aby dotrzeć do ostatniego węzła (jeśli lista nie jest pusta). Następnie alokuje pamięć dla nowego węzła, ustawia jego wskaźnik `next` na `NULL` (kończąc listę) i przypisuje wartość `str` do pola `value` nowego węzła. Jeżeli lista była pusta, nowy węzeł staje się głową listy. Funkcja zwraca `0` w przypadku sukcesu, a `-1` w przypadku błędu (np. problem z alokacją pamięci), przy czym przy błędzie wypisuje komunikat o błędzie za pomocą `perror`.
+*/
+int	append_envp_node(t_envp **head, char *str)
+{
+	t_envp	*node;
+	t_envp	*new_node;
+
+	node = *head;
+	while (*head && node->next != NULL)
+		node = node->next;
+	new_node = malloc(sizeof(t_envp));
+	if (!new_node)
+	{
+		perror("append_envp_node");
+		return (-1);
+	}
+	new_node->next = NULL;
+	new_node->value = str;
+	if (node)
+		node->next = new_node;
+	else
+		node = new_node;
+	return (0);
 }
