@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/11 17:01:51 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/14 20:08:35 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,10 @@ typedef struct s_token
 # define MISS_QUOTE_ERR "Error: missing quote"
 # define MISS_CMD_ERR "Error: missing command"
 # define SANITIZE_ERROR "Error: line sanitize error"
-# define REDIR_TO_OPR "Syntax error: redirection followed bu unexpected token"
-# define NULL_REDIR "Error: ambiguous redirect"
+# define REDIR_TO_OPR "Syntax error: redirection went the wrong way becouse of unexpected token"
+# define NULL_REDIR "Error: redirect got confused, it’s not sure where to go!"
+# define NUM_REQ_ERR "Exit error: We need a number, not a magic trick!"
+
 
 
 // Standard file descriptors.
@@ -105,17 +107,23 @@ void	ft_putstr_fd(char *s, int fd);
 int	ft_isspace(char c);
 int	ft_isalnum(int c);
 int	ft_isalpha(int c);
+int	ft_isdigit(int c);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 
-
+//main
+void	free_resources(t_data *data);
 
 //envp
 void	free_envp(t_envp *head);
 t_envp	*fetch_envp_node(t_envp *head, char *key);
 void increment_shlvl(t_envp *head);
 t_envp *fetch_envp (char **envp);
+int	append_envp_node(t_envp **head, char *str);
+
 //signals
 void handle_sigint(int sig);
 void	handle_signals(void);
+
 //free
 void	free_ft_split(char **split);
 void	ft_free_commands(t_cmd **commands);
@@ -130,8 +138,6 @@ int	ft_error_message(char *str, int num);
 void	msg_error(char *err);
 int	ft_perror_message(void);
 int	ft_perror_free(char *first, char *second, char *third);
-
-
 
 //utils
 void	go_to_next_quote(char *line, int *i, bool go_back);
@@ -148,7 +154,6 @@ int	ft_command(t_token **cur_token, t_token *tokens, t_cmd **cur_command, t_cmd 
 int	ft_redir(t_token **current_tok, t_token *head_tok,t_cmd **current_cmd, t_cmd *head_cmd);
 int ft_pipe(t_token **current_token,t_token *tokens, t_cmd **current_cmd,t_cmd *commands);
 // static int	ft_count_tok(t_token *tokens);
-
 
 //cmd_redir.c
 int		ft_set_redir(t_token **current_tok, t_cmd *current_cmd);
@@ -177,20 +182,21 @@ int	ft_check_tokens(t_token **tokens);
 // static int	ft_remove_empty_tokens(t_token **tokens);
 //static void	ft_remove_token(t_token **head, t_token **to_del, t_token **prev);
 
-
-
 //dollar
 int	ft_dollar(int *i, char **word, t_data *data);
 //static int	ft_valid_dollar(int *i, char *word, char **var);
 //static int	ft_expand_var(char *var, t_envp *env, char **word, int *i)
 
 //buildin.c
-//void	exit_bltin(t_data *data);
+void	exit_bltin(t_data *data);
 
+//builtin_export
+int	export_bltin(char **cmd, t_data *data);
 
+//builtin_unset
+int	unset_bltin(char **cmd, t_data *data);
 
-
-
-
+//builtin_cd
+int	cd_bltin(char **cmd, t_data *data);
 
 #endif
