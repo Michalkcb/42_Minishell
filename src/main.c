@@ -6,12 +6,15 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:08:10 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/14 18:19:40 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/14 19:49:05 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*
+Funkcja `free_resources` zwalnia zasoby przypisane do struktury `data`. Najpierw czyści historię poleceń za pomocą `rl_clear_history`. Następnie, jeśli istnieje `cmd`, wywołuje funkcję `ft_free_commands` do jej zwolnienia. Jeśli istnieje tablica `envp_arr`, jest ona zwalniana przez `free_ft_split`. Na końcu, funkcja zwalnia listę zmiennych środowiskowych `envp` za pomocą `free_envp`. Po każdej operacji ustawia odpowiednie wskaźniki na `NULL`, aby zapobiec niekontrolowanemu dostępowi do zwolnionej pamięci.
+*/
 void	free_resources(t_data *data)
 {
 	rl_clear_history();
@@ -40,6 +43,7 @@ int	read_line(t_data *data)
 	}
 	return (0);
 }
+
 
 /* !data->line gdy jest NULL czyli gdy użyto Ctrl+D(EOF) lub gdy był error na readline*/
 // Funkcja `init` inicjalizuje strukturę `t_data` i przygotowuje środowisko dla programu.
@@ -71,17 +75,13 @@ void	check_for_builtins(t_data *data)
 {
 	if (data->cmd->next != NULL || !data->cmd->cmd)
 		return ;
-	if (data->cmd->cmd && ft_strncmp(data->cmd->cmd[0],
-			"exit", 5) == 0)
+	if (data->cmd->cmd && ft_strncmp(data->cmd->cmd[0],"exit", 5) == 0)
 		exit_bltin(data);
-	else if (ft_strncmp(data->cmd->cmd[0],
-			"export", ft_strlen(data->cmd->cmd[0])) == 0)
+	else if (ft_strncmp(data->cmd->cmd[0],"export", ft_strlen(data->cmd->cmd[0])) == 0)
 		data->cmd_exit_status = export_bltin(data->cmd->cmd, data);
-	else if (ft_strncmp(data->cmd->cmd[0],
-			"unset", ft_strlen(data->cmd->cmd[0])) == 0)
+	else if (ft_strncmp(data->cmd->cmd[0],"unset", ft_strlen(data->cmd->cmd[0])) == 0)
 		data->cmd_exit_status = unset_bltin(data->cmd->cmd, data);
-	else if (ft_strncmp(data->cmd->cmd[0],
-			"cd", ft_strlen(data->cmd->cmd[0])) == 0)
+	else if (ft_strncmp(data->cmd->cmd[0],"cd", ft_strlen(data->cmd->cmd[0])) == 0)
 		data->cmd_exit_status = cd_bltin(data->cmd->cmd, data);
 }
 
