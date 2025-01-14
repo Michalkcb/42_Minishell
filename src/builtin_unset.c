@@ -6,11 +6,12 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 19:23:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/14 19:30:58 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/14 20:07:47 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
 /*
 Funkcja `unset_bltin` usuwa zmienne środowiskowe wskazane w tablicy `cmd` z listy `envp`. Dla każdego argumentu tworzy jego nazwę (część przed znakiem `=`) za pomocą `ft_substr`. Następnie szuka zmiennej w liście `envp` za pomocą `fetch_envp_node`. Jeśli zmienna istnieje i znajduje się na początku listy, usuwa ją przez `ft_remove_head_node`. W przeciwnym razie usuwa odpowiedni węzeł, znajdując jego poprzednika za pomocą `fetch_node_before`. Po przetworzeniu każdego argumentu zwalnia pamięć dla nazwy i kończy sukcesem (`0`). Jeśli napotka błąd, wywołuje `ft_perror_message`.
 */

@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 16:20:20 by ltomasze          #+#    #+#             */
-/*   Updated: 2025/01/07 18:41:13 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/14 19:57:38 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,4 +226,38 @@ int	ft_isspace(char c)
 int	ft_isalpha(int c)
 {
 	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
+}
+int	ft_isdigit(int c)
+{
+	if (c >= '0' && c <= '9')
+		return (2048);
+	else
+		return (0);
+}
+
+char	*ft_substr(char const *s, unsigned int start, size_t len)
+{
+	char	*ptr;
+	int		l;
+
+	ptr = 0;
+	if (!s)
+		return (NULL);
+	if (ft_strlen(s) < start || !len)
+	{
+		ptr = malloc(sizeof(char));
+		if (!ptr)
+			return (NULL);
+		*ptr = 0;
+		return (ptr);
+	}
+	if (len <= ft_strlen(s) - start)
+		l = len + 1;
+	else
+		l = ft_strlen(s) - start + 1;
+	ptr = (char *)malloc(sizeof(char) * l);
+	if (!ptr)
+		return (NULL);
+	ft_strlcpy(ptr, s + start, l);
+	return (ptr);
 }
