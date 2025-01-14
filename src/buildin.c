@@ -6,12 +6,15 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/07 19:40:51 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/07 19:43:14 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/14 19:08:32 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
+/*
+Funkcja `exit_bltin` obsługuje polecenie `exit` wbudowane w shellu. Sprawdza, czy podano argument (kod wyjścia). Jeśli tak, weryfikuje, czy jest to liczba (z opcjonalnym znakiem minus na początku), i jeśli nie, wyświetla komunikat o błędzie, zwalnia zasoby i kończy program z kodem wyjścia `2`. Jeśli argument jest poprawny, zamienia go na liczbę za pomocą `ft_atoi`. Gdy brak argumentu, używa domyślnego kodu wyjścia. Następnie zwalnia zasoby i zamyka program z odpowiednim kodem wyjścia.
+*/
 void	exit_bltin(t_data *data)
 {
 	int	exit_status;
