@@ -52,10 +52,6 @@ Obsługuje różne typy metaznaków:
 Redirekcje (<, >, <<, >>).
 Potoki (|).
 
-
-<b>UNDER CONSTRUCTION</b>
-
-
 Krok 7: Wykonywanie wbudowanych poleceń
 Dodaj funkcję check_for_builtins, która obsługuje polecenia:
 echo z flagą -n.
@@ -64,6 +60,8 @@ pwd (bez argumentów).
 export, unset, env (w podstawowej formie).
 exit (bez argumentów).
 Na tym etapie podstawowe wbudowane polecenia działają.
+
+<b>UNDER CONSTRUCTION</b>
 
 Krok 8: Wykonywanie poleceń zewnętrznych
 Funkcja execute_cmds, która:
