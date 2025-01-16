@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 19:23:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/14 20:07:47 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/16 18:30:38 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,16 @@ int	unset_bltin(char **cmd, t_data *data)
 		free(name);
 	}
 	return (0);
+}
+/*
+Funkcja `ft_remove_head_node` usuwa pierwszy węzeł listy zmiennych środowiskowych `envp`. Przechowuje wskaźnik na następny węzeł, zwalnia pamięć zajmowaną przez wartość i sam pierwszy węzeł, a następnie ustawia wskaźnik głowy listy na kolejny węzeł. Dzięki temu lista jest modyfikowana bez utraty danych poza usuniętym elementem.
+*/
+void	ft_remove_head_node(t_envp **head)
+{
+	t_envp	*new_head;
+
+	new_head = (*head)->next;
+	free((*head)->value);
+	free(*head);
+	*head = new_head;
 }
