@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/14 20:08:35 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/16 19:56:31 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ t_envp	*fetch_envp_node(t_envp *head, char *key);
 void increment_shlvl(t_envp *head);
 t_envp *fetch_envp (char **envp);
 int	append_envp_node(t_envp **head, char *str);
+void	remove_envp_node(t_envp *prev_node);
+t_envp	*fetch_node_before(t_envp **head, char *key);
 
 //signals
 void handle_sigint(int sig);
@@ -195,8 +197,12 @@ int	export_bltin(char **cmd, t_data *data);
 
 //builtin_unset
 int	unset_bltin(char **cmd, t_data *data);
+void	ft_remove_head_node(t_envp **head);
 
 //builtin_cd
 int	cd_bltin(char **cmd, t_data *data);
+// static int	ft_cd_home(t_data *data, t_envp *home);
+// static int	cd_handler(char *str, t_data *data);
+
 
 #endif
