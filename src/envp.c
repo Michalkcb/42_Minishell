@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 16:38:07 by ltomasze          #+#    #+#             */
-/*   Updated: 2025/01/14 20:02:06 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/16 18:35:27 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,4 +128,19 @@ int	append_envp_node(t_envp **head, char *str)
 	else
 		node = new_node;
 	return (0);
+}
+/*
+Funkcja `remove_envp_node` usuwa węzeł listy zmiennych środowiskowych `envp`, który znajduje się za podanym węzłem `prev_node`. Aktualizuje wskaźnik `next` w `prev_node`, aby pominąć usuwany węzeł, a następnie zwalnia pamięć zajmowaną przez jego wartość i sam węzeł. Funkcja zapobiega wyciekowi pamięci i zachowuje ciągłość listy.
+*/
+void	remove_envp_node(t_envp *prev_node)
+{
+	t_envp	*node;
+
+	node = prev_node->next;
+	if (node->next != NULL)
+		prev_node->next = node->next;
+	else
+		prev_node->next = NULL;
+	free (node->value);
+	free (node);
 }
