@@ -6,7 +6,7 @@
 #    By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/19 16:44:33 by ltomasze          #+#    #+#              #
-#    Updated: 2025/01/14 20:06:35 by mbany            ###   ########.fr        #
+#    Updated: 2025/01/16 19:33:58 by mbany            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,8 +31,8 @@ src/token_satinization.c \
 src/cmd_redir.c \
 src/buildin.c \
 src/builtin_export.c \
-builtin_unset.c \
-builtin_cd.c
+src/builtin_unset.c \
+src/builtin_cd.c
 
 OBJS = $(SRCS:.c=.o)
 
