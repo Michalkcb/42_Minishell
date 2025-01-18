@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/18 15:40:31 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/18 15:46:08 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ char	**convert_envp_list_to_array(t_envp *head);
 //signals
 void handle_sigint(int sig);
 void	handle_signals(void);
+void	set_signals_to_default(void);
 
 //free
 void	free_ft_split(char **split);
