@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:34:09 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/18 13:10:21 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/18 13:28:00 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,22 +82,3 @@ static void	process_last_cmd_child(t_data *data, t_cmd *cmd_node, int input_fd)
 	exit(status);
 }
 
-static void	process_last_cmd(t_data *data, t_cmd *cmd_node, int input_fd)
-{
-	pid_t	pid;
-	int		status;
-
-	pid = fork();
-	if (pid < 0)
-		perror("fork failed");
-	else if (pid == 0)
-		process_last_cmd_child(data, cmd_node, input_fd);
-	else
-	{
-		signal(SIGINT, SIG_IGN);
-		if (input_fd > 0)
-			close(input_fd);
-		waitpid(pid, &status, 0);
-		set_exit_status(&(data->cmd_exit_status), status);
-	}
-}
