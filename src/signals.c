@@ -3,23 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ltomasze <ltomasze@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 16:48:07 by ltomasze          #+#    #+#             */
-/*   Updated: 2024/12/27 15:50:31 by ltomasze         ###   ########.fr       */
+/*   Updated: 2025/01/18 15:45:54 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void handle_sigint(int sig)
-{
-	(void)sig;
-	write(STDOUT_FILENO, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_redisplay();
-}
 
 /* Parametr sig reprezentuje numer sygnału, który został wysłany do programu. 
 W tej funkcji nie jest on używany, dlatego jest on "ignorowany" (tzn. nie jest przetwarzany). 
@@ -40,13 +31,30 @@ W skrócie, funkcja handle_sigint zapewnia, że po naciśnięciu Ctrl+C:
 Kursor przechodzi na nową linię,
 Poprzednia linia jest usuwana z bufora,
 Terminal nie zostaje w stanie "brudnym" (pozostaje czysty, z nową pustą linią).*/
+void handle_sigint(int sig)
+{
+	(void)sig;
+	write(STDOUT_FILENO, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
 
+
+/*signal(SIGINT, handle_sigint); po to aby po naciśnięciu ctrl+c
+nie wyrzuciło nas do dużego shella
+signal(SIGQUIT, SIG_IGN); aby po naciśnie ctrl+\ nie przerwalo programu,
+ten sygnał jest ignorowany*/
 void	handle_signals(void)
 {
 	signal(SIGINT, handle_sigint);
 	signal(SIGQUIT, SIG_IGN);
 }
-/*signal(SIGINT, handle_sigint); po to aby po naciśnięciu ctrl+c
-nie wyrzuciło nas do dużego shella
-signal(SIGQUIT, SIG_IGN); aby po naciśnie ctrl+\ nie przerwalo programu,
-ten sygnał jest ignorowany*/
+/*
+Funkcja `set_signals_to_default` ustawia domyślne zachowanie dla sygnałów `SIGQUIT` (wyjście z programu) oraz `SIGINT` (przerwanie procesu, np. przyciskanie Ctrl+C). Jest używana w projekcie *Minishell*, aby przywrócić standardowe działania systemowe dla tych sygnałów, które mogą być zmieniane w trakcie działania powłoki, np. aby powłoka poprawnie reagowała na przerwania.
+*/
+void	set_signals_to_default(void)
+{
+	signal(SIGQUIT, SIG_DFL);
+	signal(SIGINT, SIG_DFL);
+}
