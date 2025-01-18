@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/18 12:41:18 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/18 15:40:31 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 #include <fcntl.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+# include <sys/wait.h>
+
 
 typedef struct s_envp
 {
@@ -121,6 +123,7 @@ t_envp *fetch_envp (char **envp);
 int	append_envp_node(t_envp **head, char *str);
 void	remove_envp_node(t_envp *prev_node);
 t_envp	*fetch_node_before(t_envp **head, char *key);
+char	**convert_envp_list_to_array(t_envp *head);
 
 //signals
 void handle_sigint(int sig);
@@ -206,6 +209,11 @@ int	cd_bltin(char **cmd, t_data *data);
 
 //execute
 void	execute_cmds(t_data *data);
+void	recursive_pipeline(int input_fd, t_data *data, t_cmd *cmd_node);
+//static void	process_last_cmd(t_data *data, t_cmd *cmd_node, int input_fd)
+//static void	process_last_cmd_child(t_data *data, t_cmd *cmd_node, int input_fd);
+
+
 
 
 #endif
