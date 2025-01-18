@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:08:10 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/14 19:49:05 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/18 11:43:03 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,5 +110,6 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_commands_creation(&data) == -1)
 			continue ;
 		check_for_builtins(&data);
+		execute_cmds(&data);
 	}
 }
