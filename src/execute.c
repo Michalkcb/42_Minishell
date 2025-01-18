@@ -6,13 +6,14 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:34:09 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/18 13:49:07 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/18 15:17:55 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 static void	process_last_cmd_child(t_data *data, t_cmd *cmd_node, int input_fd);
 static void	process_last_cmd(t_data *data, t_cmd *cmd_node, int input_fd);
+static void	process_cmd(t_data *data, t_cmd *cmd_node,int input_fd, int *fd_pipe);
 /*
 Funkcja `execute_cmds` odświeża tablicę zmiennych środowiskowych na podstawie aktualnej listy połączonej, a następnie wywołuje funkcję `recursive_pipeline`, aby wykonać polecenia w potoku. Jest używana w projekcie *Minishell*, aby zapewnić synchronizację stanu zmiennych środowiskowych i obsłużyć złożone struktury potoków w trakcie wykonywania poleceń.
 */
@@ -103,4 +104,35 @@ static void	process_last_cmd(t_data *data, t_cmd *cmd_node, int input_fd)
 		waitpid(pid, &status, 0);
 		set_exit_status(&(data->cmd_exit_status), status);
 	}
+}
+/*
+Funkcja `process_cmd` w *Minishell* obsługuje wykonanie pojedynczego polecenia w ramach potoku. Ustawia sygnały na domyślne, zarządza wejściem/wyjściem przez przekierowania i deskryptory plików, oraz zamyka niepotrzebne deskryptory w potoku. Jeśli polecenie jest wbudowane, wykonuje je od razu. W przeciwnym razie wyszukuje pełną ścieżkę do programu i uruchamia go za pomocą `execve`. Funkcja kończy działanie, gdy wystąpi błąd lub zakończy wykonanie polecenia. Jest kluczowa dla obsługi każdego kroku w potoku i zapewnia prawidłowe przetwarzanie danych oraz synchronizację procesów.
+*/
+static void	process_cmd(t_data *data, t_cmd *cmd_node,
+	int input_fd, int *fd_pipe)
+{
+	int	output_fd;
+	int	status;
+
+	set_signals_to_default();
+	input_fd = update_input_fd(cmd_node, input_fd);
+	if (input_fd < 0)
+	{
+		close(fd_pipe[0]);
+		close(fd_pipe[1]);
+		exit(1);
+	}
+	output_fd = get_output_fd(cmd_node, fd_pipe);
+	duplicate_fds(input_fd, output_fd);
+	close(fd_pipe[0]);
+	close(fd_pipe[1]);
+	if (input_fd > 0)
+		close(input_fd);
+	if (!cmd_node->cmd)
+		exit(0);
+	check_for_builtin_and_execute(cmd_node->cmd, data);
+	cmd_node->cmd[0] = find_cmd_path(data->envp, cmd_node->cmd[0], &status);
+	if (cmd_node->cmd[0] && input_fd >= 0 && cmd_node->redir_error == false)
+		status = execve(cmd_node->cmd[0], cmd_node->cmd, data->envp_arr);
+	exit(status);
 }
