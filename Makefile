@@ -6,7 +6,7 @@
 #    By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/19 16:44:33 by ltomasze          #+#    #+#              #
-#    Updated: 2025/01/18 11:49:55 by mbany            ###   ########.fr        #
+#    Updated: 2025/01/18 15:28:56 by mbany            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,8 @@ src/cmd_redir.c \
 src/buildin.c \
 src/builtin_export.c \
 src/builtin_unset.c \
-src/builtin_cd.c
+src/builtin_cd.c\
+src/execute.c
 
 OBJ_DIR = obj
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
