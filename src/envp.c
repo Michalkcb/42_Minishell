@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 16:38:07 by ltomasze          #+#    #+#             */
-/*   Updated: 2025/01/16 18:52:36 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/18 12:47:23 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,4 +170,34 @@ t_envp	*fetch_node_before(t_envp **head, char *key)
 			p_node = p_node->next;
 	}
 	return (NULL);
+}
+/*
+Funkcja `convert_envp_llist_to_array` konwertuje listę połączoną zmiennych środowiskowych na tablicę łańcuchów znaków. Iteruje po liście, kopiując wartości każdej zmiennej do nowej tablicy i dodaje na końcu wskaźnik `NULL`. Funkcja jest używana w projekcie *Minishell*, aby dostosować format zmiennych środowiskowych do wymagań funkcji systemowych, które oczekują tablicy jako argumentu, np. podczas wykonywania zewnętrznych poleceń.
+*/
+char	**convert_envp_llist_to_array(t_envp *head)
+{
+	t_envp	*node;
+	size_t	nodes_cnt;
+	size_t	i;
+	char	**arr;
+
+	nodes_cnt = 0;
+	node = head;
+	while (node && ++nodes_cnt)
+		node = node->next;
+	arr = malloc(sizeof(char *) * (nodes_cnt + 1));
+	if (!arr)
+		return (NULL);
+	node = head;
+	i = 0;
+	while (node)
+	{
+		arr[i] = ft_strdup(node->value);
+		if (!arr[i])
+			return (NULL);
+		i++;
+		node = node->next;
+	}
+	arr[i] = NULL;
+	return (arr);
 }
