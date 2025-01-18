@@ -6,12 +6,13 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:34:09 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/18 13:28:00 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/18 13:49:07 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 static void	process_last_cmd_child(t_data *data, t_cmd *cmd_node, int input_fd);
+static void	process_last_cmd(t_data *data, t_cmd *cmd_node, int input_fd);
 /*
 Funkcja `execute_cmds` odświeża tablicę zmiennych środowiskowych na podstawie aktualnej listy połączonej, a następnie wywołuje funkcję `recursive_pipeline`, aby wykonać polecenia w potoku. Jest używana w projekcie *Minishell*, aby zapewnić synchronizację stanu zmiennych środowiskowych i obsłużyć złożone struktury potoków w trakcie wykonywania poleceń.
 */
@@ -81,4 +82,25 @@ static void	process_last_cmd_child(t_data *data, t_cmd *cmd_node, int input_fd)
 		perror("execve failed");
 	exit(status);
 }
+/*
+Funkcja `process_last_cmd` w *Minishell* uruchamia ostatnie polecenie w potoku, tworząc nowy proces przy użyciu `fork`. W procesie potomnym wywołuje funkcję `process_last_cmd_child`, która realizuje wykonanie polecenia, zarządza wejściem/wyjściem i obsługuje błędy. Proces nadrzędny ignoruje sygnały przerwania, zamyka niepotrzebne deskryptory wejścia, czeka na zakończenie procesu potomnego i zapisuje status wyjścia polecenia. Funkcja jest niezbędna do obsługi ostatniego polecenia w potoku i zapewnia poprawną synchronizację procesów oraz ustawienie końcowego statusu wyjścia.
+*/
+static void	process_last_cmd(t_data *data, t_cmd *cmd_node, int input_fd)
+{
+	pid_t	pid;
+	int		status;
 
+	pid = fork();
+	if (pid < 0)
+		perror("fork failed");
+	else if (pid == 0)
+		process_last_cmd_child(data, cmd_node, input_fd);
+	else
+	{
+		signal(SIGINT, SIG_IGN);
+		if (input_fd > 0)
+			close(input_fd);
+		waitpid(pid, &status, 0);
+		set_exit_status(&(data->cmd_exit_status), status);
+	}
+}
