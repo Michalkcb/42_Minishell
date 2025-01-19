@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 11:51:13 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/19 12:37:43 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/19 14:29:23 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,24 @@ int	get_output_fd(t_cmd *cmd, int *fd_pipe)
 	else if (output_fd < 0 && !cmd->outfile)
 		perror("output_fd");
 	return (output_fd);
+}
+/*
+Funkcja `env_bltin` obsługuje wbudowaną komendę `env`, która wypisuje wszystkie zmienne środowiskowe zapisane w liście `data->envp`. Jeśli do komendy `env` podano dodatkowe argumenty, funkcja wyświetla błąd "env: Too many arguments" i kończy działanie z kodem błędu `1`. W przeciwnym razie iteruje przez listę zmiennych środowiskowych i wypisuje każdą z nich. Funkcja kończy proces, zwracając kod zakończenia `0`. Jest to wymagane w *minishell*, by zapewnić poprawne działanie i wyświetlanie zmiennych środowiskowych zgodnie ze specyfikacją.
+*/
+void	env_bltin(t_data *data)
+{
+	t_envp	*envp;
+
+	if (data->cmd->cmd[1])
+	{
+		ft_error_message("env: Too many arguments", 2);
+		exit(1);
+	}
+	envp = data->envp;
+	while (envp)
+	{
+		printf("%s\n", envp->value);
+		envp = envp->next;
+	}
+	exit(0);
 }
