@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:34:09 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/18 15:17:55 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/19 15:29:55 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,4 +135,49 @@ static void	process_cmd(t_data *data, t_cmd *cmd_node,
 	if (cmd_node->cmd[0] && input_fd >= 0 && cmd_node->redir_error == false)
 		status = execve(cmd_node->cmd[0], cmd_node->cmd, data->envp_arr);
 	exit(status);
+}
+/*
+Funkcja `duplicate_fds` przekierowuje deskryptory plików, ustawiając podany deskryptor wejścia (`input_fd`) jako standardowe wejście (`STDIN_FILENO`) i deskryptor wyjścia (`output_fd`) jako standardowe wyjście (`STDOUT_FILENO`) za pomocą `dup2`. Jeśli przekierowanie się nie powiedzie, wypisuje odpowiedni komunikat błędu. Jest wykorzystywana w projekcie *Minishell* do obsługi redirekcji wejścia i wyjścia w procesach, umożliwiając przekierowanie strumieni dla poleceń w pipeline lub redirekcji plikowej.
+*/
+void	duplicate_fds(int input_fd, int output_fd)
+{
+	if (input_fd > 0)
+	{
+		if (dup2(input_fd, STDIN_FILENO) < 0)
+			perror("dup2 failed");
+	}
+	if (output_fd > 2)
+	{
+		if (dup2(output_fd, STDOUT_FILENO) < 0)
+			perror("dup2 failed");
+	}
+}
+/*
+Funkcja `find_cmd_path` znajduje pełną ścieżkę do polecenia, sprawdzając najpierw, czy jest to wbudowane polecenie (sprawdzenie doty), a następnie czy polecenie jest plikiem wykonywalnym. Jeśli nie ma odpowiednich uprawnień, ustawia odpowiedni kod błędu. Następnie przeszukuje zmienne środowiskowe (szukając zmiennej `PATH`), aby znaleźć ścieżkę, w której polecenie może być wykonywane. Jeśli nie uda się znaleźć ścieżki lub polecenie nie istnieje, ustawia błąd i zwraca `NULL`. Funkcja ta jest częścią projektu, który odwzorowuje zachowanie powłoki, w tym zarządzanie błędami przy wykonywaniu poleceń.
+*/
+char	*find_cmd_path(t_envp *envp, char *cmd, int *status)
+{
+	char	*final_envp_path;
+
+	if (check_for_dot_builtin(cmd, status))
+		return (NULL);
+	if (access(cmd, F_OK) == 0 && access(cmd, X_OK) == 0)
+		return (cmd);
+	else if (access(cmd, F_OK) == 0 && access(cmd, X_OK) != 0)
+	{
+		set_status_and_msg_err(NO_PERM_ERR, 126, status);
+		free(cmd);
+		return (NULL);
+	}
+	while (envp && ft_strncmp(envp->value, "PATH", 4) != 0)
+		envp = envp->next;
+	final_envp_path = find_correct_path(envp, cmd);
+	if (final_envp_path == NULL)
+	{
+		set_status_and_msg_err(NO_CMD_ERR, 127, status);
+		free(cmd);
+		return (NULL);
+	}
+	free(cmd);
+	return (final_envp_path);
 }

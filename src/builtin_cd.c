@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 19:34:11 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/16 20:01:50 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/19 15:27:56 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@ static int	ft_cd_home(t_data *data, t_envp *home);
 static int	cd_handler(char *str, t_data *data);
 static int	ft_change_value(char *var, char *res, t_data *data);
 static int	ft_cd_env_change(t_data *data, char *var, char *res);
-
 /*
 Funkcja `cd_bltin` obsługuje polecenie `cd` w shellu, zmieniając bieżący katalog roboczy. Jeśli podano więcej niż jeden argument, zwraca błąd „Too many arguments”. Jeśli brak argumentów, próbuje przejść do katalogu `HOME`, wyszukując go w zmiennych środowiskowych. Jeśli podano jeden argument, używa go do zmiany katalogu za pomocą funkcji `cd_handler`. W przypadku błędu zwraca kod `1`, a przy sukcesie `0`.
 */
