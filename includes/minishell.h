@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/19 15:25:14 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/19 15:30:10 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,7 @@ void	execute_cmds(t_data *data);
 void	recursive_pipeline(int input_fd, t_data *data, t_cmd *cmd_node);
 //static void	process_last_cmd(t_data *data, t_cmd *cmd_node, int input_fd)
 //static void	process_last_cmd_child(t_data *data, t_cmd *cmd_node, int input_fd);
+char	*find_cmd_path(t_envp *envp, char *cmd, int *status);
 
 // file_descriptor_handlers
 int	update_input_fd(t_cmd *cmd, int input_fd);
