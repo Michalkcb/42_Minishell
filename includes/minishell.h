@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/19 14:29:32 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/19 14:40:42 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ int	ft_dollar(int *i, char **word, t_data *data);
 //static int	ft_valid_dollar(int *i, char *word, char **var);
 //static int	ft_expand_var(char *var, t_envp *env, char **word, int *i)
 
-//buildin.c
+//builtin.c
 void	exit_bltin(t_data *data);
 
 //builtin_export
@@ -222,6 +222,8 @@ int	get_output_fd(t_cmd *cmd, int *fd_pipe);
 void	duplicate_fds(int input_fd, int output_fd);
 void	env_bltin(t_data *data);
 
+//builtin_echo
+void	echo_bltin(char **cmd);
 
 
 
