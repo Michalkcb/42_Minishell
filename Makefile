@@ -6,7 +6,7 @@
 #    By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/19 16:44:33 by ltomasze          #+#    #+#              #
-#    Updated: 2025/01/19 12:23:09 by mbany            ###   ########.fr        #
+#    Updated: 2025/01/19 14:40:57 by mbany            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,12 +70,13 @@ src/clean_toknes.c \
 src/dollar.c \
 src/token_satinization.c \
 src/cmd_redir.c \
-src/buildin.c \
+src/builtin.c \
 src/builtin_export.c \
 src/builtin_unset.c \
 src/builtin_cd.c\
 src/execute.c \
-src/file_descriptor_handlers
+src/file_descriptor_handlers \
+src/builtin_echo.c
 
 OBJ_DIR = obj
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
