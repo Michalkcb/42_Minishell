@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/14 19:12:08 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/14 19:53:56 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/19 15:24:45 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,21 @@ static int	ft_change_env(char *var, int j, t_data *data)
 	free(node->value);
 	node->value = dup_var;
 	return (0);
+}
+/*
+Funkcja `ft_print_env_var` realizuje działanie wbudowanej komendy `export`, wypisując wszystkie zmienne środowiskowe przechowywane w strukturze `envp` w formacie `declare -x VAR=value`. Jeśli przekazano argument do komendy, funkcja kończy działanie z kodem `cmd_exit_status`. W przeciwnym razie przechodzi po wszystkich zmiennych środowiskowych i wypisuje je. Funkcja kończy działanie z kodem `0`. Jest to część projektu *minishell*, odwzorowująca funkcjonalność komendy `export` w tym interpreteurze.
+*/
+int	ft_print_env_var(t_data *data)
+{
+	t_envp	*envp;
+
+	if (data->cmd->cmd[1])
+		exit(data->cmd_exit_status);
+	envp = data->envp;
+	while (envp)
+	{
+		printf("declare -x %s\n", envp->value);
+		envp = envp->next;
+	}
+	exit (0);
 }
