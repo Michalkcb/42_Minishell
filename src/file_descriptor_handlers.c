@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 11:51:13 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/19 12:34:48 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/19 12:37:43 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,4 +34,26 @@ int	update_input_fd(t_cmd *cmd, int input_fd)
 	}
 	return (input_fd);
 }
+/*
+Funkcja `get_output_fd` ustala deskryptor pliku wyjściowego dla danej komendy. Jeśli komenda ma przypisany plik wyjściowy, otwiera go w trybie nadpisywania lub dołączania w zależności od flagi `append`. Jeśli nie ma pliku wyjściowego i komenda jest ostatnia, używa standardowego wyjścia. W przeciwnym razie używa końca zapisu w potoku. Zapewnia, że każda komenda w potoku ma odpowiednio zdefiniowany cel wyjściowy, a w przypadku błędu otwarcia pliku generuje komunikat diagnostyczny.
+*/
+int	get_output_fd(t_cmd *cmd, int *fd_pipe)
+{
+	int	output_fd;
 
+	if (cmd->outfile && cmd->append == false)
+		output_fd = open(cmd->outfile,
+				O_WRONLY | O_CREAT | O_TRUNC, 0664);
+	else if (cmd->outfile && cmd->append == true)
+		output_fd = open(cmd->outfile,
+				O_WRONLY | O_CREAT | O_APPEND, 0664);
+	else if (cmd->next == NULL)
+		output_fd = STDOUT_FILENO;
+	else
+		output_fd = fd_pipe[1];
+	if (output_fd < 0 && cmd->outfile)
+		perror(cmd->outfile);
+	else if (output_fd < 0 && !cmd->outfile)
+		perror("output_fd");
+	return (output_fd);
+}
