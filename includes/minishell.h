@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/21 19:07:59 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/21 20:00:22 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,9 @@ void	echo_bltin(char **cmd);
 
 //buildin_echo
 void	pwd_bltin(void);
+
+// get next line
+char	*get_next_line(int fd);
 
 
 
