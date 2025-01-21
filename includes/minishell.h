@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/21 20:00:22 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/21 20:10:47 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,9 @@ void	exit_bltin(t_data *data);
 //builtin_export
 int	export_bltin(char **cmd, t_data *data);
 int	ft_print_env_var(t_data *data);
+
+//builtin_pwd
+void	pwd_bltin(void);
 
 //builtin_unset
 int	unset_bltin(char **cmd, t_data *data);
