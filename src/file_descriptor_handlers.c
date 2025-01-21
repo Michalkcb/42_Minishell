@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 11:51:13 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/19 14:29:23 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/21 19:07:44 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,4 +76,34 @@ void	env_bltin(t_data *data)
 		envp = envp->next;
 	}
 	exit(0);
+}
+/*
+Funkcja `get_heredoc` odczytuje dane w trybie "here-document" z wejścia standardowego, zapisując je do pipe, aż napotka specjalny delimiter (wskazany przez `eof`). Zwraca deskryptor pliku rury, który będzie użyty jako wejście dla kolejnej komendy. Używana jest w przypadku, gdy użytkownik chce przekazać dane do komendy, zakończone specjalnym wskaźnikiem (np. `EOF`). Celem jest obsługa dynamicznych danych wejściowych w potokach.
+*/
+int	get_heredoc(t_cmd *cmd)
+{
+	int		fd_pipe[2];
+	char	*input;
+	char	*eof;
+
+	eof = cmd->infile;
+	pipe(fd_pipe);
+	while (1)
+	{
+		write(1, "> ", 2);
+		input = get_next_line(STDIN_FILENO);
+		if (!input)
+		{
+			printf("\nWarning: here_doc delimited by EOF signal\n");
+			break ;
+		}
+		if (ft_strncmp(input, eof, ft_strlen(eof)) == 0
+			&& input[ft_strlen(eof)] == '\n')
+			break ;
+		write(fd_pipe[1], input, ft_strlen(input));
+		free(input);
+	}
+	free(input);
+	close(fd_pipe[1]);
+	return (fd_pipe[0]);
 }
