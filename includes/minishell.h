@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/21 18:28:38 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/21 18:53:49 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,7 @@ typedef struct s_token
 # define NO_PERM_ERR "Error: You shall not pass. Permission denied"
 # define NO_CMD_ERR "Error: command not found"
 # define NO_FNAME_ARG_ERR "Error: filename argument required"
-
-
-
-
-
+# define HEREDOC_ERR "Error: heredoc malfunction"
 
 // Standard file descriptors.
 #define	STDIN_FILENO	0	/* Standard input.  */
@@ -117,6 +113,8 @@ int	ft_isalnum(int c);
 int	ft_isalpha(int c);
 int	ft_isdigit(int c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_strjoin(char const *s1, char const *s2);
+char	**ft_split(char const *s, char c);
 
 //main
 void	free_resources(t_data *data);
