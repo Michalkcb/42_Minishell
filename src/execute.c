@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:34:09 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/21 18:25:37 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/21 18:27:22 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static void	process_last_cmd(t_data *data, t_cmd *cmd_node, int input_fd);
 static void	process_cmd(t_data *data, t_cmd *cmd_node,int input_fd, int *fd_pipe);
 static void	set_status_and_msg_err(char *err, int code, int *status);
 static int	check_for_dot_builtin(char *cmd, int *status);
+static char	*find_correct_path(t_envp *envp, char *cmd);
 /*
 Funkcja `execute_cmds` odświeża tablicę zmiennych środowiskowych na podstawie aktualnej listy połączonej, a następnie wywołuje funkcję `recursive_pipeline`, aby wykonać polecenia w potoku. Jest używana w projekcie *Minishell*, aby zapewnić synchronizację stanu zmiennych środowiskowych i obsłużyć złożone struktury potoków w trakcie wykonywania poleceń.
 */
