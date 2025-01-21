@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:34:09 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/21 18:13:09 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/21 18:17:26 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,4 +196,29 @@ void	set_exit_status(int *cmd_exit_status, int status)
 		*cmd_exit_status = 128;
 	else
 		*cmd_exit_status = -1;
+}
+/*
+Funkcja `check_for_dot_builtin` sprawdza, czy podana komenda to specjalny przypadek `"."` lub `".."`. Jeśli tak, ustawia odpowiedni kod błędu i komunikat, zwalnia pamięć przydzieloną dla komendy i zwraca wartość `1`, co oznacza, że komenda nie powinna być dalej wykonywana. W przeciwnym razie zwraca `0`. Funkcja zapobiega błędom, gdy użytkownik próbuje użyć nieprawidłowych poleceń systemowych `"."` lub `".."`, co zwiększa zgodność z zachowaniem powłoki.
+*/
+static int	check_for_dot_builtin(char *cmd, int *status)
+{
+	if (ft_strncmp(cmd, ".", 2) == 0)
+	{
+		set_status_and_msg_err(NO_FNAME_ARG_ERR, 2, status);
+		free(cmd);
+		return (1);
+	}
+	else if (ft_strncmp(cmd, "..", 3) == 0)
+	{
+		set_status_and_msg_err(NO_CMD_ERR, 127, status);
+		free(cmd);
+		return (1);
+	}
+	return (0);
+}
+
+static void	set_status_and_msg_err(char *err, int code, int *status)
+{
+	*status = code;
+	msg_error(err);
 }
