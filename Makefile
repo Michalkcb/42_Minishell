@@ -6,7 +6,7 @@
 #    By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/19 16:44:33 by ltomasze          #+#    #+#              #
-#    Updated: 2025/01/21 20:03:46 by mbany            ###   ########.fr        #
+#    Updated: 2025/01/21 20:11:07 by mbany            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -71,6 +71,7 @@ src/dollar.c \
 src/token_satinization.c \
 src/cmd_redir.c \
 src/builtin.c \
+src/builtin_pwd.c \
 src/builtin_export.c \
 src/builtin_unset.c \
 src/builtin_cd.c\
