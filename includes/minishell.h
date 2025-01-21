@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/21 18:53:49 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/21 19:07:59 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,7 @@ int	update_input_fd(t_cmd *cmd, int input_fd);
 int	get_output_fd(t_cmd *cmd, int *fd_pipe);
 void	duplicate_fds(int input_fd, int output_fd);
 void	env_bltin(t_data *data);
+int	get_heredoc(t_cmd *cmd);
 
 //builtin_echo
 void	echo_bltin(char **cmd);
