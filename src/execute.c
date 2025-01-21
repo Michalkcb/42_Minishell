@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:34:09 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/19 15:29:55 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/21 18:13:09 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,4 +180,20 @@ char	*find_cmd_path(t_envp *envp, char *cmd, int *status)
 	}
 	free(cmd);
 	return (final_envp_path);
+}
+/*
+Funkcja `set_exit_status` analizuje kod zakończenia procesu zapisany w zmiennej `status` i ustawia odpowiedni kod zakończenia w `cmd_exit_status`. Jeśli proces zakończył się normalnie, zapisuje jego kod wyjścia. W przypadku zakończenia sygnałem dodaje wartość 128 do numeru sygnału. Gdy proces został zatrzymany lub wznowiony, również ustawia odpowiedni kod. Funkcja ta pozwala na poprawne odwzorowanie i przekazanie kodów zakończenia procesów w powłoce, co jest kluczowe do obsługi błędów i sygnałów w projekcie.
+*/
+void	set_exit_status(int *cmd_exit_status, int status)
+{
+	if (WIFEXITED(status))
+		*cmd_exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		*cmd_exit_status = 128 + WTERMSIG(status);
+	else if (WIFSTOPPED(status))
+		*cmd_exit_status = 128 + WSTOPSIG(status);
+	else if (WIFCONTINUED(status))
+		*cmd_exit_status = 128;
+	else
+		*cmd_exit_status = -1;
 }
