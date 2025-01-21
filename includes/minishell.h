@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/21 18:23:39 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/21 18:28:38 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,10 @@ typedef struct s_token
 # define NULL_REDIR "Error: redirect got confused, it's not sure where to go!"
 # define NUM_REQ_ERR "Exit error: We need a number, not a magic trick!"
 # define NO_PERM_ERR "Error: You shall not pass. Permission denied"
+# define NO_CMD_ERR "Error: command not found"
+# define NO_FNAME_ARG_ERR "Error: filename argument required"
+
+
 
 
 
@@ -222,6 +226,7 @@ char	*find_cmd_path(t_envp *envp, char *cmd, int *status);
 void	set_exit_status(int *cmd_exit_status, int status);
 //static int	check_for_dot_builtin(char *cmd, int *status);
 //static void	set_status_and_msg_err(char *err, int code, int *status);
+//static char	*find_correct_path(t_envp *envp, char *cmd);
 
 // file_descriptor_handlers
 int	update_input_fd(t_cmd *cmd, int input_fd);
