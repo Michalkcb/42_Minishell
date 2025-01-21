@@ -62,13 +62,13 @@ export, unset, env (w podstawowej formie).
 exit (bez argumentów).
 Na tym etapie podstawowe wbudowane polecenia działają.
 
-<b>UNDER CONSTRUCTION</b>
-
 Krok 8: Wykonywanie poleceń zewnętrznych
 Funkcja execute_cmds, która:
 Wykonuje komendy zewnętrzne (np. ls, cat).
 Obsługuje potoki (|) poprzez tworzenie procesów potomnych.
 Obsługuje redirekcje wejścia/wyjścia (<, >).
+
+<b>UNDER CONSTRUCTION</b>
 
 Krok 9: Zaawansowana obsługa sygnałów
 Rozbuduj obsługę sygnałów:
