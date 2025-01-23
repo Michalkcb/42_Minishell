@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 16:38:07 by ltomasze          #+#    #+#             */
-/*   Updated: 2025/01/23 18:57:59 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/23 19:04:13 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,8 @@ void	increment_shlvl(t_envp *head)
 	if (!shlvl)
 		perror("ft_itoa");
 	free(node->value);
-	/*if (!node->value)
-		perror("ft_strjoin");*/
+	if (!node->value)
+		perror("ft_strjoin");
 	free(shlvl);
 }
 
