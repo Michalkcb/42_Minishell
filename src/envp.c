@@ -6,14 +6,15 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 16:38:07 by ltomasze          #+#    #+#             */
-/*   Updated: 2025/01/18 13:06:23 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/23 18:57:59 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 /*
- * Funkcja `free_envp` zwalnia pamięć wszystkich węzłów listy połączonej `t_envp`.
+ * Funkcja `free_envp` zwalnia pamięć 
+ wszystkich węzłów listy połączonej `t_envp`.
  */
 void	free_envp(t_envp *head)
 {
@@ -27,35 +28,40 @@ void	free_envp(t_envp *head)
 		free(tmp);
 	}
 }
+
 /*
- * Funkcja `fetch_envp_node` przeszukuje listę `t_envp` w poszukiwaniu węzła, którego klucz odpowiada podanemu `key`.
+ * Funkcja `fetch_envp_node` przeszukuje listę 
+ `t_envp` w poszukiwaniu węzła, 
+ którego klucz odpowiada podanemu `key`.
  * Klucz to tekst występujący przed znakiem '=' w wartości węzła.
  * Zwraca wskaźnik na węzeł, jeśli znajdzie, lub NULL, jeśli nie znajdzie.
  */
 t_envp	*fetch_envp_node(t_envp *head, char *key)
 {
-	t_envp*node;
+	t_envp	*node;
 	size_t	key_len;
 
 	key_len = ft_strlen(key);
 	node = head;
 	while (node != NULL)
 	{
-		if (ft_strncmp(key, node->value, key_len) == 0 && node->value[key_len] == '=')
+		if (ft_strncmp(key, node->value, key_len) == 0
+			&& node->value[key_len] == '=')
 			return (node);
 		node = node->next;
 	}
 	return (NULL);
 }
+
 /*
  * Funkcja `increment_shlvl` zwiększa wartość zmiennej środowiskowej `SHLVL`.
  * `SHLVL` odpowiada liczbie razy, kiedy uruchomiono powłokę w tej samej sesji.
  */
-void increment_shlvl(t_envp *head)
+void	increment_shlvl(t_envp *head)
 {
-	t_envp *node;
+	t_envp	*node;
 	char	*shlvl;
-	int	shlvl_nb;
+	int		shlvl_nb;
 
 	node = fetch_envp_node(head, "SHLVL");
 	shlvl = ft_strchr(node->value, '=') + 1;
@@ -76,7 +82,7 @@ void increment_shlvl(t_envp *head)
  * Funkcja `fetch_envp` przekształca tablicę `envp` na listę połączoną `t_envp`.
  * Zwraca wskaźnik na początek listy.
  */
-t_envp *fetch_envp (char **envp)
+t_envp	*fetch_envp(char **envp)
 {
 	t_envp	*envp_node;
 	t_envp	*envp_head;
@@ -89,7 +95,7 @@ t_envp *fetch_envp (char **envp)
 	{
 		envp_node = malloc(sizeof(t_envp));
 		envp_node->value = ft_strdup(*envp);
-		if(!envp_node || !envp_node->value)
+		if (!envp_node || !envp_node->value)
 		{
 			free_envp(envp_head);
 			return (NULL);
@@ -104,8 +110,19 @@ t_envp *fetch_envp (char **envp)
 	}
 	return (envp_head);
 }
+
 /*
-Funkcja `append_envp_node` dodaje nowy węzeł do listy jednokierunkowej typu `t_envp` (prawdopodobnie lista przechowująca zmienne środowiskowe). Działa to tak, że zaczyna od głowy listy (`*head`), przeszukuje ją, aby dotrzeć do ostatniego węzła (jeśli lista nie jest pusta). Następnie alokuje pamięć dla nowego węzła, ustawia jego wskaźnik `next` na `NULL` (kończąc listę) i przypisuje wartość `str` do pola `value` nowego węzła. Jeżeli lista była pusta, nowy węzeł staje się głową listy. Funkcja zwraca `0` w przypadku sukcesu, a `-1` w przypadku błędu (np. problem z alokacją pamięci), przy czym przy błędzie wypisuje komunikat o błędzie za pomocą `perror`.
+Funkcja `append_envp_node` dodaje nowy węzeł do listy jednokierunkowej 
+typu `t_envp` (prawdopodobnie lista przechowująca zmienne środowiskowe). 
+Działa to tak, że zaczyna od głowy listy (`*head`), 
+przeszukuje ją, aby dotrzeć do ostatniego węzła (jeśli lista nie jest pusta). 
+Następnie alokuje pamięć dla nowego węzła, 
+ustawia jego wskaźnik `next` na `NULL` (kończąc listę) 
+i przypisuje wartość `str` do pola `value` nowego węzła. 
+Jeżeli lista była pusta, nowy węzeł staje się głową listy. 
+Funkcja zwraca `0` w przypadku sukcesu, 
+a `-1` w przypadku błędu (np. problem z alokacją pamięci), 
+przy czym przy błędzie wypisuje komunikat o błędzie za pomocą `perror`.
 */
 int	append_envp_node(t_envp **head, char *str)
 {
@@ -129,8 +146,14 @@ int	append_envp_node(t_envp **head, char *str)
 		node = new_node;
 	return (0);
 }
+
 /*
-Funkcja `remove_envp_node` usuwa węzeł listy zmiennych środowiskowych `envp`, który znajduje się za podanym węzłem `prev_node`. Aktualizuje wskaźnik `next` w `prev_node`, aby pominąć usuwany węzeł, a następnie zwalnia pamięć zajmowaną przez jego wartość i sam węzeł. Funkcja zapobiega wyciekowi pamięci i zachowuje ciągłość listy.
+Funkcja `remove_envp_node` usuwa węzeł listy zmiennych środowiskowych `envp`, 
+który znajduje się za podanym węzłem `prev_node`. 
+Aktualizuje wskaźnik `next` w `prev_node`, 
+aby pominąć usuwany węzeł, 
+a następnie zwalnia pamięć zajmowaną przez jego wartość i sam węzeł. 
+Funkcja zapobiega wyciekowi pamięci i zachowuje ciągłość listy.
 */
 void	remove_envp_node(t_envp *prev_node)
 {
@@ -144,8 +167,18 @@ void	remove_envp_node(t_envp *prev_node)
 	free (node->value);
 	free (node);
 }
+
 /*
-Funkcja `fetch_node_before` wyszukuje węzeł poprzedzający węzeł w liście `envp`, który zawiera zmienną środowiskową o nazwie zgodnej z podanym kluczem `key`. Oblicza długość klucza, a następnie iteruje po liście, porównując `key` z nazwami zmiennych w węzłach. Jeśli zmienna znajduje się w pierwszym węźle, zwraca jego wskaźnik. Jeśli zmienna jest dalej w liście, zwraca wskaźnik na węzeł bezpośrednio poprzedzający. Jeśli zmiennej nie ma, zwraca `NULL`. Funkcja służy do modyfikowania listy przez umożliwienie usuwania lub aktualizacji znalezionego węzła.
+Funkcja `fetch_node_before` wyszukuje węzeł poprzedzający węzeł w liście `envp`, 
+który zawiera zmienną środowiskową o nazwie zgodnej z podanym kluczem `key`. 
+Oblicza długość klucza, a następnie iteruje po liście, 
+porównując `key` z nazwami zmiennych w węzłach. 
+Jeśli zmienna znajduje się w pierwszym węźle, zwraca jego wskaźnik. 
+Jeśli zmienna jest dalej w liście, 
+zwraca wskaźnik na węzeł bezpośrednio poprzedzający. 
+Jeśli zmiennej nie ma, zwraca `NULL`. 
+Funkcja służy do modyfikowania listy przez umożliwienie 
+usuwania lub aktualizacji znalezionego węzła.
 */
 t_envp	*fetch_node_before(t_envp **head, char *key)
 {
@@ -171,8 +204,16 @@ t_envp	*fetch_node_before(t_envp **head, char *key)
 	}
 	return (NULL);
 }
+
 /*
-Funkcja `convert_envp_llist_to_array` konwertuje listę połączoną zmiennych środowiskowych na tablicę łańcuchów znaków. Iteruje po liście, kopiując wartości każdej zmiennej do nowej tablicy i dodaje na końcu wskaźnik `NULL`. Funkcja jest używana w projekcie *Minishell*, aby dostosować format zmiennych środowiskowych do wymagań funkcji systemowych, które oczekują tablicy jako argumentu, np. podczas wykonywania zewnętrznych poleceń.
+Funkcja `convert_envp_llist_to_array` konwertuje 
+listę połączoną zmiennych środowiskowych na tablicę łańcuchów znaków. 
+Iteruje po liście, kopiując wartości każdej zmiennej 
+do nowej tablicy i dodaje na końcu wskaźnik `NULL`. 
+Funkcja jest używana w projekcie *Minishell*, 
+aby dostosować format zmiennych środowiskowych do wymagań funkcji systemowych, 
+które oczekują tablicy jako argumentu, 
+np. podczas wykonywania zewnętrznych poleceń.
 */
 char	**convert_envp_list_to_array(t_envp *head)
 {
