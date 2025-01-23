@@ -6,19 +6,27 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/18 12:34:09 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/21 18:27:22 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/23 20:11:45 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
 static void	process_last_cmd_child(t_data *data, t_cmd *cmd_node, int input_fd);
 static void	process_last_cmd(t_data *data, t_cmd *cmd_node, int input_fd);
-static void	process_cmd(t_data *data, t_cmd *cmd_node,int input_fd, int *fd_pipe);
+static void	process_cmd(t_data *data, t_cmd *cmd_node,
+				int input_fd, int *fd_pipe);
 static void	set_status_and_msg_err(char *err, int code, int *status);
 static int	check_for_dot_builtin(char *cmd, int *status);
 static char	*find_correct_path(t_envp *envp, char *cmd);
+
 /*
-Funkcja `execute_cmds` odświeża tablicę zmiennych środowiskowych na podstawie aktualnej listy połączonej, a następnie wywołuje funkcję `recursive_pipeline`, aby wykonać polecenia w potoku. Jest używana w projekcie *Minishell*, aby zapewnić synchronizację stanu zmiennych środowiskowych i obsłużyć złożone struktury potoków w trakcie wykonywania poleceń.
+Funkcja `execute_cmds` odświeża tablicę zmiennych środowiskowych 
+na podstawie aktualnej listy połączonej, 
+a następnie wywołuje funkcję `recursive_pipeline`, 
+aby wykonać polecenia w potoku. Jest używana w projekcie *Minishell*, 
+aby zapewnić synchronizację stanu zmiennych środowiskowych 
+i obsłużyć złożone struktury potoków w trakcie wykonywania poleceń.
 */
 void	execute_cmds(t_data *data)
 {
@@ -30,8 +38,21 @@ void	execute_cmds(t_data *data)
 	data->envp_arr = convert_envp_list_to_array(data->envp);
 	recursive_pipeline(0, data, data->cmd);
 }
+
 /*
-Funkcja `recursive_pipeline` implementuje przetwarzanie potoków (*pipelines*) w poleceniach w *Minishell*. Działa rekurencyjnie, tworząc kolejne potoki za pomocą funkcji `pipe` i procesów potomnych za pomocą `fork`. Jeśli `cmd_node` jest ostatnim w potoku, wywołuje funkcję `process_last_cmd`. W przeciwnym razie przetwarza aktualne polecenie w procesie potomnym za pomocą `process_cmd`, przekazując dane przez potok do następnego procesu. Proces nadrzędny zarządza zamykaniem plików i czeka na zakończenie procesów potomnych. Funkcja pozwala na wykonanie ciągu powiązanych poleceń, gdzie wyjście jednego jest wejściem dla kolejnego, co jest kluczową funkcjonalnością w powłoce zgodnej z UNIX-em.
+Funkcja `recursive_pipeline` implementuje przetwarzanie potoków 
+(*pipelines*) w poleceniach w *Minishell*. Działa rekurencyjnie, 
+tworząc kolejne potoki za pomocą funkcji `pipe` 
+i procesów potomnych za pomocą `fork`. Jeśli `cmd_node` jest ostatnim w potoku, 
+wywołuje funkcję `process_last_cmd`. 
+W przeciwnym razie przetwarza aktualne polecenie 
+w procesie potomnym za pomocą `process_cmd`, 
+przekazując dane przez potok do następnego procesu. 
+Proces nadrzędny zarządza zamykaniem plików 
+i czeka na zakończenie procesów potomnych. 
+Funkcja pozwala na wykonanie ciągu powiązanych poleceń, 
+gdzie wyjście jednego jest wejściem dla kolejnego, 
+co jest kluczową funkcjonalnością w powłoce zgodnej z UNIX-em.
 */
 void	recursive_pipeline(int input_fd, t_data *data, t_cmd *cmd_node)
 {
@@ -60,8 +81,21 @@ void	recursive_pipeline(int input_fd, t_data *data, t_cmd *cmd_node)
 		}
 	}
 }
+
 /*
-Funkcja `process_last_cmd_child` obsługuje wykonanie ostatniego polecenia w potoku w procesie potomnym w *Minishell*. Ustawia domyślne sygnały, aktualizuje deskryptory wejścia i wyjścia, wykonuje zduplikowanie deskryptorów dla wejścia i wyjścia procesu oraz zamyka niepotrzebne deskryptory. Jeśli polecenie jest funkcją wbudowaną, wywołuje ją, a jeśli nie, szuka ścieżki do wykonywalnego pliku w zmiennych środowiskowych i wywołuje `execve`, aby uruchomić program z podanym środowiskiem. W przypadku błędu w wykonaniu wyświetla komunikat diagnostyczny i kończy proces z odpowiednim statusem. Funkcja jest kluczowa dla poprawnego obsłużenia ostatniego polecenia w potoku z właściwym zarządzaniem wejściem/wyjściem oraz obsługą błędów.
+Funkcja `process_last_cmd_child` obsługuje wykonanie 
+ostatniego polecenia w potoku w procesie potomnym w *Minishell*. 
+Ustawia domyślne sygnały, aktualizuje deskryptory wejścia i wyjścia, 
+wykonuje zduplikowanie deskryptorów dla wejścia 
+i wyjścia procesu oraz zamyka niepotrzebne deskryptory. 
+Jeśli polecenie jest funkcją wbudowaną, wywołuje ją, 
+a jeśli nie, szuka ścieżki do wykonywalnego pliku 
+w zmiennych środowiskowych i wywołuje `execve`, 
+aby uruchomić program z podanym środowiskiem. 
+W przypadku błędu w wykonaniu wyświetla komunikat diagnostyczny 
+i kończy proces z odpowiednim statusem. 
+Funkcja jest kluczowa dla poprawnego obsłużenia ostatniego polecenia 
+w potoku z właściwym zarządzaniem wejściem/wyjściem oraz obsługą błędów.
 */
 static void	process_last_cmd_child(t_data *data, t_cmd *cmd_node, int input_fd)
 {
@@ -86,8 +120,18 @@ static void	process_last_cmd_child(t_data *data, t_cmd *cmd_node, int input_fd)
 		perror("execve failed");
 	exit(status);
 }
+
 /*
-Funkcja `process_last_cmd` w *Minishell* uruchamia ostatnie polecenie w potoku, tworząc nowy proces przy użyciu `fork`. W procesie potomnym wywołuje funkcję `process_last_cmd_child`, która realizuje wykonanie polecenia, zarządza wejściem/wyjściem i obsługuje błędy. Proces nadrzędny ignoruje sygnały przerwania, zamyka niepotrzebne deskryptory wejścia, czeka na zakończenie procesu potomnego i zapisuje status wyjścia polecenia. Funkcja jest niezbędna do obsługi ostatniego polecenia w potoku i zapewnia poprawną synchronizację procesów oraz ustawienie końcowego statusu wyjścia.
+Funkcja `process_last_cmd` w *Minishell* uruchamia ostatnie polecenie w potoku, 
+tworząc nowy proces przy użyciu `fork`. 
+W procesie potomnym wywołuje funkcję `process_last_cmd_child`, 
+która realizuje wykonanie polecenia, zarządza wejściem/wyjściem 
+i obsługuje błędy. Proces nadrzędny ignoruje sygnały przerwania, 
+zamyka niepotrzebne deskryptory wejścia, 
+czeka na zakończenie procesu potomnego i zapisuje status wyjścia polecenia. 
+Funkcja jest niezbędna do obsługi ostatniego polecenia w potoku 
+i zapewnia poprawną synchronizację procesów 
+oraz ustawienie końcowego statusu wyjścia.
 */
 static void	process_last_cmd(t_data *data, t_cmd *cmd_node, int input_fd)
 {
@@ -108,8 +152,18 @@ static void	process_last_cmd(t_data *data, t_cmd *cmd_node, int input_fd)
 		set_exit_status(&(data->cmd_exit_status), status);
 	}
 }
+
 /*
-Funkcja `process_cmd` w *Minishell* obsługuje wykonanie pojedynczego polecenia w ramach potoku. Ustawia sygnały na domyślne, zarządza wejściem/wyjściem przez przekierowania i deskryptory plików, oraz zamyka niepotrzebne deskryptory w potoku. Jeśli polecenie jest wbudowane, wykonuje je od razu. W przeciwnym razie wyszukuje pełną ścieżkę do programu i uruchamia go za pomocą `execve`. Funkcja kończy działanie, gdy wystąpi błąd lub zakończy wykonanie polecenia. Jest kluczowa dla obsługi każdego kroku w potoku i zapewnia prawidłowe przetwarzanie danych oraz synchronizację procesów.
+Funkcja `process_cmd` w *Minishell* obsługuje wykonanie 
+pojedynczego polecenia w ramach potoku. Ustawia sygnały na domyślne, 
+zarządza wejściem/wyjściem przez przekierowania i deskryptory plików, 
+oraz zamyka niepotrzebne deskryptory w potoku. 
+Jeśli polecenie jest wbudowane, wykonuje je od razu. 
+W przeciwnym razie wyszukuje pełną ścieżkę do programu 
+i uruchamia go za pomocą `execve`. Funkcja kończy działanie, 
+gdy wystąpi błąd lub zakończy wykonanie polecenia. 
+Jest kluczowa dla obsługi każdego kroku w potoku 
+i zapewnia prawidłowe przetwarzanie danych oraz synchronizację procesów.
 */
 static void	process_cmd(t_data *data, t_cmd *cmd_node,
 	int input_fd, int *fd_pipe)
@@ -139,8 +193,19 @@ static void	process_cmd(t_data *data, t_cmd *cmd_node,
 		status = execve(cmd_node->cmd[0], cmd_node->cmd, data->envp_arr);
 	exit(status);
 }
+
 /*
-Funkcja `duplicate_fds` przekierowuje deskryptory plików, ustawiając podany deskryptor wejścia (`input_fd`) jako standardowe wejście (`STDIN_FILENO`) i deskryptor wyjścia (`output_fd`) jako standardowe wyjście (`STDOUT_FILENO`) za pomocą `dup2`. Jeśli przekierowanie się nie powiedzie, wypisuje odpowiedni komunikat błędu. Jest wykorzystywana w projekcie *Minishell* do obsługi redirekcji wejścia i wyjścia w procesach, umożliwiając przekierowanie strumieni dla poleceń w pipeline lub redirekcji plikowej.
+Funkcja `duplicate_fds` przekierowuje deskryptory plików, 
+ustawiając podany deskryptor wejścia (`input_fd`) 
+jako standardowe wejście (`STDIN_FILENO`) 
+i deskryptor wyjścia (`output_fd`) jako standardowe wyjście 
+(`STDOUT_FILENO`) za pomocą `dup2`. 
+Jeśli przekierowanie się nie powiedzie, 
+wypisuje odpowiedni komunikat błędu. 
+Jest wykorzystywana w projekcie *Minishell* 
+do obsługi redirekcji wejścia i wyjścia w procesach, 
+umożliwiając przekierowanie strumieni dla poleceń 
+w pipeline lub redirekcji plikowej.
 */
 void	duplicate_fds(int input_fd, int output_fd)
 {
@@ -155,8 +220,18 @@ void	duplicate_fds(int input_fd, int output_fd)
 			perror("dup2 failed");
 	}
 }
+
 /*
-Funkcja `find_cmd_path` znajduje pełną ścieżkę do polecenia, sprawdzając najpierw, czy jest to wbudowane polecenie (sprawdzenie doty), a następnie czy polecenie jest plikiem wykonywalnym. Jeśli nie ma odpowiednich uprawnień, ustawia odpowiedni kod błędu. Następnie przeszukuje zmienne środowiskowe (szukając zmiennej `PATH`), aby znaleźć ścieżkę, w której polecenie może być wykonywane. Jeśli nie uda się znaleźć ścieżki lub polecenie nie istnieje, ustawia błąd i zwraca `NULL`. Funkcja ta jest częścią projektu, który odwzorowuje zachowanie powłoki, w tym zarządzanie błędami przy wykonywaniu poleceń.
+Funkcja `find_cmd_path` znajduje pełną ścieżkę do polecenia, 
+sprawdzając najpierw, czy jest to wbudowane polecenie (sprawdzenie doty), 
+a następnie czy polecenie jest plikiem wykonywalnym. 
+Jeśli nie ma odpowiednich uprawnień, ustawia odpowiedni kod błędu. 
+Następnie przeszukuje zmienne środowiskowe (szukając zmiennej `PATH`), 
+aby znaleźć ścieżkę, w której polecenie może być wykonywane. 
+Jeśli nie uda się znaleźć ścieżki lub polecenie nie istnieje, 
+ustawia błąd i zwraca `NULL`. Funkcja ta jest częścią projektu, 
+który odwzorowuje zachowanie powłoki, 
+w tym zarządzanie błędami przy wykonywaniu poleceń.
 */
 char	*find_cmd_path(t_envp *envp, char *cmd, int *status)
 {
@@ -184,8 +259,17 @@ char	*find_cmd_path(t_envp *envp, char *cmd, int *status)
 	free(cmd);
 	return (final_envp_path);
 }
+
 /*
-Funkcja `set_exit_status` analizuje kod zakończenia procesu zapisany w zmiennej `status` i ustawia odpowiedni kod zakończenia w `cmd_exit_status`. Jeśli proces zakończył się normalnie, zapisuje jego kod wyjścia. W przypadku zakończenia sygnałem dodaje wartość 128 do numeru sygnału. Gdy proces został zatrzymany lub wznowiony, również ustawia odpowiedni kod. Funkcja ta pozwala na poprawne odwzorowanie i przekazanie kodów zakończenia procesów w powłoce, co jest kluczowe do obsługi błędów i sygnałów w projekcie.
+Funkcja `set_exit_status` analizuje kod zakończenia procesu 
+zapisany w zmiennej `status` i ustawia odpowiedni kod zakończenia 
+w `cmd_exit_status`. Jeśli proces zakończył się normalnie, 
+zapisuje jego kod wyjścia. 
+W przypadku zakończenia sygnałem dodaje wartość 128 do numeru sygnału. 
+Gdy proces został zatrzymany lub wznowiony, również ustawia odpowiedni kod. 
+Funkcja ta pozwala na poprawne odwzorowanie 
+i przekazanie kodów zakończenia procesów w powłoce, 
+co jest kluczowe do obsługi błędów i sygnałów w projekcie.
 */
 void	set_exit_status(int *cmd_exit_status, int status)
 {
@@ -200,8 +284,16 @@ void	set_exit_status(int *cmd_exit_status, int status)
 	else
 		*cmd_exit_status = -1;
 }
+
 /*
-Funkcja `check_for_dot_builtin` sprawdza, czy podana komenda to specjalny przypadek `"."` lub `".."`. Jeśli tak, ustawia odpowiedni kod błędu i komunikat, zwalnia pamięć przydzieloną dla komendy i zwraca wartość `1`, co oznacza, że komenda nie powinna być dalej wykonywana. W przeciwnym razie zwraca `0`. Funkcja zapobiega błędom, gdy użytkownik próbuje użyć nieprawidłowych poleceń systemowych `"."` lub `".."`, co zwiększa zgodność z zachowaniem powłoki.
+Funkcja `check_for_dot_builtin` sprawdza, 
+czy podana komenda to specjalny przypadek `"."` 
+lub `".."`. Jeśli tak, ustawia odpowiedni kod błędu i komunikat, 
+zwalnia pamięć przydzieloną dla komendy i zwraca wartość `1`, 
+co oznacza, że komenda nie powinna być dalej wykonywana. 
+W przeciwnym razie zwraca `0`. Funkcja zapobiega błędom, 
+gdy użytkownik próbuje użyć nieprawidłowych poleceń systemowych `"."` 
+lub `".."`, co zwiększa zgodność z zachowaniem powłoki.
 */
 static int	check_for_dot_builtin(char *cmd, int *status)
 {
@@ -225,8 +317,17 @@ static void	set_status_and_msg_err(char *err, int code, int *status)
 	*status = code;
 	msg_error(err);
 }
+
 /*
-Funkcja `find_correct_path` szuka pełnej ścieżki do wykonania podanej komendy `cmd` na podstawie zmiennej środowiskowej `PATH`. Rozdziela wartość zmiennej `PATH` na osobne ścieżki, łączy każdą z nich z nazwą komendy i sprawdza, czy wynikowa ścieżka wskazuje na plik wykonywalny. Jeśli taką znajdzie, zwraca jej pełną ścieżkę; w przeciwnym razie zwraca `NULL`. Funkcja pozwala lokalizować i uruchamiać polecenia znajdujące się w katalogach zdefiniowanych w zmiennej `PATH`.
+Funkcja `find_correct_path` szuka pełnej ścieżki do 
+wykonania podanej komendy `cmd` na podstawie zmiennej środowiskowej `PATH`. 
+Rozdziela wartość zmiennej `PATH` na osobne ścieżki, 
+łączy każdą z nich z nazwą komendy i sprawdza, 
+czy wynikowa ścieżka wskazuje na plik wykonywalny. 
+Jeśli taką znajdzie, zwraca jej pełną ścieżkę; 
+w przeciwnym razie zwraca `NULL`. Funkcja pozwala lokalizować 
+i uruchamiać polecenia znajdujące się w katalogach 
+zdefiniowanych w zmiennej `PATH`.
 */
 static char	*find_correct_path(t_envp *envp, char *cmd)
 {
