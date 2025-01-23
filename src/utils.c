@@ -6,21 +6,29 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/28 16:07:38 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/11 15:11:37 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/23 18:29:20 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 /*
-Funkcja `go_to_next_quote` znajduje pozycję następnego lub poprzedniego wystąpienia cudzysłowu w łańcuchu `line`, w zależności od wartości `go_back`. Jeśli `go_back` jest `false`, przeszukuje ciąg do przodu, a jeśli `true`, przeszukuje do tyłu. Zapisuje nową pozycję cudzysłowu w wskaźniku `i`. Funkcja obsługuje identyfikację par cudzysłowów w tekście.
+Funkcja `go_to_next_quote` znajduje pozycję 
+następnego lub poprzedniego wystąpienia 
+cudzysłowu w łańcuchu `line`, w zależności 
+od wartości `go_back`. Jeśli `go_back` jest `false`,
+ przeszukuje ciąg do przodu, a jeśli `true`, 
+ przeszukuje do tyłu. Zapisuje nową pozycję 
+ cudzysłowu w wskaźniku `i`. 
+ Funkcja obsługuje identyfikację par 
+ cudzysłowów w tekście.
 */
 void	go_to_next_quote(char *line, int *i, bool go_back)
 {
 	char	quote;
-	int	j;
+	int		j;
 
-	if(!line || !i)
+	if (!line || !i)
 		return ;
 	quote = line[*i];
 	j = *i;
@@ -40,7 +48,13 @@ void	go_to_next_quote(char *line, int *i, bool go_back)
 }
 
 /*
-Funkcja `ft_check_access` sprawdza dostęp do pliku `file` w trybie odczytu (READ) lub zapisu (WRITE) za pomocą funkcji `access`. Jeśli plik nie istnieje lub brak odpowiednich uprawnień, wypisuje komunikat błędu i zwraca wartość ujemną. W przypadku sukcesu zwraca `0`. Używana jest do weryfikacji dostępności plików przed operacjami na nich.
+Funkcja `ft_check_access` sprawdza dostęp do pliku
+`file` w trybie odczytu (READ) lub zapisu (WRITE) 
+za pomocą funkcji `access`. Jeśli plik nie istnieje
+lub brak odpowiednich uprawnień, wypisuje
+komunikat błędu i zwraca wartość ujemną. 
+W przypadku sukcesu zwraca `0`. Używana jest 
+do weryfikacji dostępności plików przed operacjami na nich.
 */
 int	ft_check_access(char *file, int type)
 {
