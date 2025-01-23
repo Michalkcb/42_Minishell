@@ -6,20 +6,20 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/21 20:10:47 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/23 18:24:05 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-#include <stdbool.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <stdbool.h>
+# include <stdlib.h>
+# include <signal.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 # include <sys/wait.h>
 
 
