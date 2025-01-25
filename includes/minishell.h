@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/25 17:53:20 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/25 18:19:35 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct s_token
 # define NULL_REDIR "Error: redirect got confused, it's not sure where to go!"
 # define NUM_REQ_ERR "Exit error: We need a number, not a magic trick!"
 # define NO_PERM_ERR "Error: You shall not pass. Permission denied"
-# define NO_CMD_ERR "Error: command not found"
+# define NO_CMD_ERR "Error: check command"
 # define NO_FNAME_ARG_ERR "Error: filename argument required"
 # define HEREDOC_ERR "Error: heredoc malfunction"
 
