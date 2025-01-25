@@ -6,14 +6,21 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 14:49:12 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/05 15:18:48 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/25 16:31:54 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 /*
-Funkcja `ft_skip_sq` przeskakuje przez zawartość pojedynczych cudzysłowów (`'`) w ciągu znaków `str`, zaczynając od pozycji `*n`. Najpierw zwiększa `*n`, by pominąć otwierający cudzysłów, następnie iteruje aż do napotkania zamykającego cudzysłowu lub końca łańcucha, a na końcu zwiększa `*n`, by przejść za zamykający cudzysłów. Funkcja umożliwia poprawne ignorowanie zawartości pojedynczych cudzysłowów przy analizie leksykalnej.
+Funkcja `ft_skip_sq` przeskakuje przez zawartość pojedynczych cudzysłowów (`'`) 
+w ciągu znaków `str`, zaczynając od pozycji `*n`. Najpierw zwiększa `*n`, 
+by pominąć otwierający cudzysłów, 
+następnie iteruje aż do napotkania zamykającego cudzysłowu 
+lub końca łańcucha, a na końcu zwiększa `*n`, 
+by przejść za zamykający cudzysłów. 
+Funkcja umożliwia poprawne ignorowanie zawartości 
+pojedynczych cudzysłowów przy analizie leksykalnej.
 */
 void	ft_skip_sq(int *n, char *str)
 {
@@ -22,8 +29,15 @@ void	ft_skip_sq(int *n, char *str)
 		(*n)++;
 	(*n)++;
 }
+
 /*
-Funkcja `ft_cross_dq` przetwarza ciąg znaków między podwójnymi cudzysłowami, zaczynając od indeksu `i+1`. Jeśli napotka znak `$`, wywołuje funkcję `ft_dollar` w celu przetworzenia zmiennej środowiskowej; w przypadku błędu zwraca `-1`. Po przetworzeniu każdego znaku (innego niż `$`), funkcja przechodzi do następnego, aż osiągnie zamykający cudzysłów. Na końcu inkrementuje `i` o 1, aby wskazać pozycję za cudzysłowem i zwraca `0`, informując o zakończeniu.
+Funkcja `ft_cross_dq` przetwarza ciąg znaków między podwójnymi cudzysłowami, 
+zaczynając od indeksu `i+1`. Jeśli napotka znak `$`, 
+wywołuje funkcję `ft_dollar` w celu przetworzenia zmiennej środowiskowej; 
+w przypadku błędu zwraca `-1`. Po przetworzeniu każdego znaku (innego niż `$`), 
+funkcja przechodzi do następnego, aż osiągnie zamykający cudzysłów. 
+Na końcu inkrementuje `i` o 1, aby wskazać pozycję za cudzysłowem 
+i zwraca `0`, informując o zakończeniu.
 */
 int	ft_cross_dq(int *i, char **word, t_data *data)
 {
@@ -41,10 +55,20 @@ int	ft_cross_dq(int *i, char **word, t_data *data)
 	(*i)++;
 	return (0);
 }
-/*
-Funkcja `ft_clear_quote` usuwa cudzysłowy (jedno- lub podwójne) z ciągu znaków, zaczynając od pozycji `i`. Szuka pozycji zamykającego cudzysłowu i tworzy nowy ciąg znaków bez tego cudzysłowa. Zmienna `new_word` jest alokowana na nową wersję ciągu, w której fragment przed i po cudzysłowie jest kopiowany, pomijając sam znak cytatu. Po zakończeniu alokacji i kopiowania pamięci, pierwotny ciąg `*word` jest zwalniany, a wskaźnik `*word` jest aktualizowany na nowo stworzoną wersję. Funkcja zwraca `0` po udanym przetworzeniu, a w przypadku błędu alokacji wywołuje `ft_perror_message`.
-*/
 
+/*
+Funkcja `ft_clear_quote` usuwa cudzysłowy (jedno- lub podwójne) z ciągu znaków, 
+zaczynając od pozycji `i`. 
+Szuka pozycji zamykającego cudzysłowu 
+i tworzy nowy ciąg znaków bez tego cudzysłowa. 
+Zmienna `new_word` jest alokowana na nową wersję ciągu, 
+w której fragment przed i po cudzysłowie jest kopiowany, 
+pomijając sam znak cytatu. Po zakończeniu alokacji 
+i kopiowania pamięci, pierwotny ciąg `*word` jest zwalniany, 
+a wskaźnik `*word` jest aktualizowany na nowo stworzoną wersję. 
+Funkcja zwraca `0` po udanym przetworzeniu, 
+a w przypadku błędu alokacji wywołuje `ft_perror_message`.
+*/
 int	ft_clear_quote(int *i, char **word, char del)
 {
 	int		n;
