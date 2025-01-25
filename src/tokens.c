@@ -6,30 +6,38 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/04 13:24:27 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/12 14:59:00 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/25 14:54:34 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 /*
-Funkcja `ft_tokenizer` przetwarza ciąg znaków `inp`, zamieniając go na listę tokenów (`t_token`). Iteracyjnie analizuje wejście, identyfikując i tworząc tokeny dla redirekcji, potoków oraz słów za pomocą funkcji pomocniczych (`ft_is_redir`, `ft_is_pipe`, `ft_is_word`). W przypadku błędu przerywa działanie i zwalnia pamięć tokenów. Pomija spacje w wejściu i, jeśli analiza przebiegnie poprawnie, zwraca listę tokenów. Dodatkowo zwalnia pamięć pierwotnej linii w `data->line`, aby uniknąć wycieków pamięci.
+Funkcja `ft_tokenizer` przetwarza ciąg znaków `inp`, 
+zamieniając go na listę tokenów (`t_token`). 
+Iteracyjnie analizuje wejście, identyfikując i tworząc tokeny dla redirekcji, 
+potoków oraz słów za pomocą funkcji pomocniczych (`ft_is_redir`, `ft_is_pipe`, 
+`ft_is_word`). W przypadku błędu przerywa działanie i zwalnia pamięć tokenów. 
+Pomija spacje w wejściu i, 
+jeśli analiza przebiegnie poprawnie, zwraca listę tokenów. 
+Dodatkowo zwalnia pamięć pierwotnej linii w `data->line`, 
+aby uniknąć wycieków pamięci.
 */
-t_token *ft_tokenizer(t_data *data, char *inp)
+t_token	*ft_tokenizer(t_data *data, char *inp)
 {
-	int i;
-	t_token *tokens;
+	int		i;
+	t_token	*tokens;
 
 	tokens = NULL;
 	i = 0;
 	while (inp && inp[i])
 	{
 		if (ft_is_redir(inp, &i, &tokens) == -1)
-			break;
+			break ;
 		if (ft_is_pipe(inp, &i, &tokens) == -1)
-			break;
+			break ;
 		if (ft_is_word(inp, &i, &tokens, data) == -1)
-			break;
+			break ;
 		if (inp[i] == ' ')
 			i++;
 	}
@@ -39,8 +47,14 @@ t_token *ft_tokenizer(t_data *data, char *inp)
 	data->line = NULL;
 	return (tokens);
 }
+
 /*
-Funkcja `ft_free_tokens` zwalnia pamięć przydzieloną dla listy tokenów. Działa poprzez iterację po wszystkich tokenach, zwalniając pamięć dla ich tekstu, a następnie same tokeny, aż do wyczerpania listy. Na końcu ustawia wskaźnik na początek listy na `NULL`, aby zapobiec dostępowi do już zwolnionej pamięci. Funkcja najpierw sprawdza, czy lista nie jest pusta przed jej przetwarzaniem.
+Funkcja `ft_free_tokens` zwalnia pamięć przydzieloną dla listy tokenów.
+Działa poprzez iterację po wszystkich tokenach, 
+zwalniając pamięć dla ich tekstu, a następnie same tokeny, 
+aż do wyczerpania listy. Na końcu ustawia wskaźnik na początek listy na `NULL`, 
+aby zapobiec dostępowi do już zwolnionej pamięci. 
+Funkcja najpierw sprawdza, czy lista nie jest pusta przed jej przetwarzaniem.
 */
 void	ft_free_tokens(t_token **tokens)
 {
@@ -58,8 +72,16 @@ void	ft_free_tokens(t_token **tokens)
 	}
 	*tokens = NULL;
 }
+
 /*
-Funkcja `create_token` tworzy nowy token z przekazanym tekstem `str` i typem `type`, a następnie dodaje go na koniec listy tokenów wskazywanej przez wskaźnik `tokens`. Jeśli lista jest pusta, nowy token staje się jej pierwszym elementem. Funkcja zwraca `0` w przypadku powodzenia lub `-1` w razie błędów (np. brak pamięci). Celem jest dynamiczne zarządzanie listą tokenów podczas analizy leksykalnej.
+Funkcja `create_token` tworzy nowy token z przekazanym tekstem `str` 
+i typem `type`, 
+a następnie dodaje go na koniec listy tokenów wskazywanej 
+przez wskaźnik `tokens`. 
+Jeśli lista jest pusta, nowy token staje się jej pierwszym elementem. 
+Funkcja zwraca `0` w przypadku powodzenia 
+lub `-1` w razie błędów (np. brak pamięci). 
+Celem jest dynamiczne zarządzanie listą tokenów podczas analizy leksykalnej.
 */
 int	create_token(char *str, int type, t_token **tokens)
 {
