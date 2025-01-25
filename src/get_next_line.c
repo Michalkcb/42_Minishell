@@ -6,12 +6,11 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/02 15:45:44 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/21 19:59:55 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/25 14:43:00 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
@@ -22,7 +21,7 @@
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 1
 # endif
-# endif
+#endif
 //start code
 static char	*read_and_return(int fd, char *buf, char *backup)
 {
