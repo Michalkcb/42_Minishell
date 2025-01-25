@@ -68,8 +68,6 @@ Wykonuje komendy zewnętrzne (np. ls, cat).
 Obsługuje potoki (|) poprzez tworzenie procesów potomnych.
 Obsługuje redirekcje wejścia/wyjścia (<, >).
 
-<b>UNDER CONSTRUCTION</b>
-
 Krok 9: Zaawansowana obsługa sygnałów
 Rozbuduj obsługę sygnałów:
 Dostosuj SIGINT i SIGQUIT w procesach potomnych.
