@@ -6,13 +6,23 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/19 11:51:13 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/21 19:07:44 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/25 17:02:08 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
 /*
-Funkcja `update_input_fd` obsługuje i aktualizuje deskryptor pliku wejściowego dla komendy, sprawdzając różne przypadki: jeśli `here_doc` jest ustawiony, wywołuje `get_heredoc`, aby utworzyć potok dla wprowadzenia; jeśli wystąpił błąd przekierowania, zwraca -1 jako sygnał błędu; jeśli podano plik wejściowy i nie ma błędu przekierowania, otwiera plik w trybie odczytu, aktualizując deskryptor. Funkcja zapewnia poprawne źródło danych wejściowych dla komend w potoku, obsługując pliki i here-dok.
+Funkcja `update_input_fd` obsługuje 
+i aktualizuje deskryptor pliku wejściowego dla komendy, 
+sprawdzając różne przypadki: jeśli `here_doc` jest ustawiony, 
+wywołuje `get_heredoc`, 
+aby utworzyć potok dla wprowadzenia; jeśli wystąpił błąd przekierowania, 
+zwraca -1 jako sygnał błędu; jeśli podano plik wejściowy 
+i nie ma błędu przekierowania, otwiera plik w trybie odczytu, 
+aktualizując deskryptor. 
+Funkcja zapewnia poprawne źródło danych wejściowych 
+dla komend w potoku, obsługując pliki i here-dok.
 */
 int	update_input_fd(t_cmd *cmd, int input_fd)
 {
@@ -34,8 +44,16 @@ int	update_input_fd(t_cmd *cmd, int input_fd)
 	}
 	return (input_fd);
 }
+
 /*
-Funkcja `get_output_fd` ustala deskryptor pliku wyjściowego dla danej komendy. Jeśli komenda ma przypisany plik wyjściowy, otwiera go w trybie nadpisywania lub dołączania w zależności od flagi `append`. Jeśli nie ma pliku wyjściowego i komenda jest ostatnia, używa standardowego wyjścia. W przeciwnym razie używa końca zapisu w potoku. Zapewnia, że każda komenda w potoku ma odpowiednio zdefiniowany cel wyjściowy, a w przypadku błędu otwarcia pliku generuje komunikat diagnostyczny.
+Funkcja `get_output_fd` ustala deskryptor pliku wyjściowego dla danej komendy. 
+Jeśli komenda ma przypisany plik wyjściowy, otwiera go w trybie nadpisywania 
+lub dołączania w zależności od flagi `append`. 
+Jeśli nie ma pliku wyjściowego i komenda jest ostatnia, 
+używa standardowego wyjścia. W przeciwnym razie używa końca zapisu w potoku. 
+Zapewnia, że każda komenda w potoku ma odpowiednio zdefiniowany cel wyjściowy, 
+
+a w przypadku błędu otwarcia pliku generuje komunikat diagnostyczny.
 */
 int	get_output_fd(t_cmd *cmd, int *fd_pipe)
 {
@@ -57,8 +75,18 @@ int	get_output_fd(t_cmd *cmd, int *fd_pipe)
 		perror("output_fd");
 	return (output_fd);
 }
+
 /*
-Funkcja `env_bltin` obsługuje wbudowaną komendę `env`, która wypisuje wszystkie zmienne środowiskowe zapisane w liście `data->envp`. Jeśli do komendy `env` podano dodatkowe argumenty, funkcja wyświetla błąd "env: Too many arguments" i kończy działanie z kodem błędu `1`. W przeciwnym razie iteruje przez listę zmiennych środowiskowych i wypisuje każdą z nich. Funkcja kończy proces, zwracając kod zakończenia `0`. Jest to wymagane w *minishell*, by zapewnić poprawne działanie i wyświetlanie zmiennych środowiskowych zgodnie ze specyfikacją.
+Funkcja `env_bltin` obsługuje wbudowaną komendę `env`, 
+która wypisuje wszystkie zmienne środowiskowe zapisane w liście `data->envp`. 
+Jeśli do komendy `env` podano dodatkowe argumenty, 
+funkcja wyświetla błąd "env: Too many arguments" 
+i kończy działanie z kodem błędu `1`. 
+W przeciwnym razie iteruje przez listę zmiennych środowiskowych 
+i wypisuje każdą z nich. 
+Funkcja kończy proces, zwracając kod zakończenia `0`. 
+Jest to wymagane w *minishell*, by zapewnić poprawne działanie 
+i wyświetlanie zmiennych środowiskowych zgodnie ze specyfikacją.
 */
 void	env_bltin(t_data *data)
 {
@@ -77,8 +105,16 @@ void	env_bltin(t_data *data)
 	}
 	exit(0);
 }
+
 /*
-Funkcja `get_heredoc` odczytuje dane w trybie "here-document" z wejścia standardowego, zapisując je do pipe, aż napotka specjalny delimiter (wskazany przez `eof`). Zwraca deskryptor pliku rury, który będzie użyty jako wejście dla kolejnej komendy. Używana jest w przypadku, gdy użytkownik chce przekazać dane do komendy, zakończone specjalnym wskaźnikiem (np. `EOF`). Celem jest obsługa dynamicznych danych wejściowych w potokach.
+Funkcja `get_heredoc` odczytuje dane w trybie "here-document" 
+z wejścia standardowego, zapisując je do pipe, 
+aż napotka specjalny delimiter (wskazany przez `eof`). 
+Zwraca deskryptor pliku rury, 
+który będzie użyty jako wejście dla kolejnej komendy. 
+Używana jest w przypadku, gdy użytkownik chce przekazać dane do komendy, 
+zakończone specjalnym wskaźnikiem (np. `EOF`). 
+Celem jest obsługa dynamicznych danych wejściowych w potokach.
 */
 int	get_heredoc(t_cmd *cmd)
 {
