@@ -6,18 +6,30 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/05 15:07:32 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/07 18:45:56 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/25 16:48:39 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
+
 static int	ft_valid_dollar(int *i, char *word, char **var);
 static int	ft_expand_var(char *var, t_envp *env, char **word, int *i);
 static int	ft_change_word(char *var, char **word, int *i, t_data *data);
 static int	ft_exit_extension(char *var, char **word, int *i, t_data *data);
 
 /*
-Funkcja `ft_dollar` przetwarza wystąpienie zmiennej środowiskowej w słowie. Sprawdza poprawność zmiennej poprzez wywołanie `ft_valid_dollar` i uzyskuje jej wartość. Jeśli nie ma zmiennej do przetworzenia, zwraca `-1` i zwalnia pamięć. Gdy zmienna istnieje, indeks `i` jest odpowiednio aktualizowany. Następnie funkcja próbuje rozszerzyć zmienną środowiskową (funkcja `ft_expand_var`) i, jeśli uda się ją zmienić, wywołuje `ft_change_word` w celu zaktualizowania słowa. Jeśli którykolwiek z tych procesów zakończy się błędem (`value == -1`), funkcja zwraca `-1`. W przeciwnym razie, gdy wszystko przebiegnie poprawnie, zwraca `0`.
+Funkcja `ft_dollar` przetwarza wystąpienie zmiennej środowiskowej w słowie. 
+Sprawdza poprawność zmiennej poprzez wywołanie `ft_valid_dollar` 
+i uzyskuje jej wartość. 
+Jeśli nie ma zmiennej do przetworzenia, zwraca `-1` i zwalnia pamięć. 
+Gdy zmienna istnieje, indeks `i` jest odpowiednio aktualizowany. 
+Następnie funkcja próbuje rozszerzyć zmienną środowiskową 
+(funkcja `ft_expand_var`) i, 
+jeśli uda się ją zmienić, wywołuje `ft_change_word` 
+w celu zaktualizowania słowa. 
+Jeśli którykolwiek z tych procesów zakończy się błędem 
+(`value == -1`), funkcja zwraca `-1`. 
+W przeciwnym razie, gdy wszystko przebiegnie poprawnie, zwraca `0`.
 */
 int	ft_dollar(int *i, char **word, t_data *data)
 {
@@ -46,8 +58,16 @@ int	ft_dollar(int *i, char **word, t_data *data)
 	}
 	return (0);
 }
+
 /*
-Funkcja `ft_valid_dollar` sprawdza poprawność składni zmiennej środowiskowej po znaku `$` w podanym ciągu `word`. Obsługuje różne przypadki, takie jak `$$`, `$?`, nieprawidłowe znaki lub alfanumeryczne zmienne. Wartość `n` określa długość sekwencji. Gdy zmienna jest poprawna, alokuje pamięć dla `var`, kopiując nazwę zmiennej. Jeśli wystąpi błąd alokacji, zwraca -1, a w innych przypadkach zwraca długość przetworzonych znaków lub kod błędu.
+Funkcja `ft_valid_dollar` sprawdza poprawność składni 
+zmiennej środowiskowej po znaku `$` w podanym ciągu `word`. 
+Obsługuje różne przypadki, takie jak `$$`, `$?`, 
+nieprawidłowe znaki lub alfanumeryczne zmienne. 
+Wartość `n` określa długość sekwencji. 
+Gdy zmienna jest poprawna, alokuje pamięć dla `var`, kopiując nazwę zmiennej. 
+Jeśli wystąpi błąd alokacji, zwraca -1, 
+a w innych przypadkach zwraca długość przetworzonych znaków lub kod błędu.
 */
 static int	ft_valid_dollar(int *i, char *word, char **var)
 {
@@ -56,8 +76,8 @@ static int	ft_valid_dollar(int *i, char *word, char **var)
 	n = 1;
 	if (word[*i + n] && word[*i + n] == '$')
 	{
-		while (word[*i + n] && word[*i + n++] == '$');
-		return (n);
+		while (word[*i + n] && word[*i + n++] == '$')
+			return (n);
 	}
 	if (word[*i + n] == '?')
 		n++;
@@ -76,8 +96,17 @@ static int	ft_valid_dollar(int *i, char *word, char **var)
 	ft_strlcpy(*var, &word[1 + (*i)], n);
 	return (0);
 }
+
 /*
-Funkcja `ft_expand_var` zamienia zmienną środowiskową w podanym ciągu `word` (rozpoczynającą się od `$`) na odpowiadającą jej wartość z listy środowiskowej `env`. Najpierw znajduje zmienną w liście, a następnie alokuje nowy ciąg, zastępując nazwę zmiennej jej wartością. Jeśli zmienna nie istnieje lub nie ma wartości, zwraca 0. W przypadku błędów alokacji zwraca -1. Funkcja aktualizuje wskaźnik na przetworzony ciąg i odpowiednio przesuwa indeks `i`.
+Funkcja `ft_expand_var` zamienia zmienną środowiskową 
+w podanym ciągu `word` (rozpoczynającą się od `$`) 
+na odpowiadającą jej wartość z listy środowiskowej `env`. 
+Najpierw znajduje zmienną w liście, a następnie alokuje nowy ciąg, 
+zastępując nazwę zmiennej jej wartością. 
+Jeśli zmienna nie istnieje lub nie ma wartości, zwraca 0. 
+W przypadku błędów alokacji zwraca -1. 
+Funkcja aktualizuje wskaźnik na przetworzony ciąg 
+i odpowiednio przesuwa indeks `i`.
 */
 static int	ft_expand_var(char *var, t_envp *env, char **word, int *i)
 {
@@ -107,8 +136,15 @@ static int	ft_expand_var(char *var, t_envp *env, char **word, int *i)
 	*i = *i + value_len -1;
 	return (1);
 }
+
 /*
-Funkcja `ft_change_word` usuwa zmienną środowiskową z ciągu `word` zaczynającą się od `$`, zastępując ją pustym tekstem, chyba że zmienna to `$?`, która jest obsługiwana osobno przez `ft_exit_extension`. Oblicza długości zmiennej i oryginalnego ciągu, alokuje nowy ciąg bez zmiennej, kopiuje odpowiednie fragmenty tekstu, aktualizuje wskaźnik `word`, a następnie zwalnia starą pamięć. W przypadku błędów alokacji zwraca -1.
+Funkcja `ft_change_word` usuwa zmienną środowiskową 
+z ciągu `word` zaczynającą się od `$`, 
+zastępując ją pustym tekstem, chyba że zmienna to `$?`, 
+która jest obsługiwana osobno przez `ft_exit_extension`. 
+Oblicza długości zmiennej i oryginalnego ciągu, alokuje nowy ciąg bez zmiennej, 
+kopiuje odpowiednie fragmenty tekstu, aktualizuje wskaźnik `word`, 
+a następnie zwalnia starą pamięć. W przypadku błędów alokacji zwraca -1.
 */
 static int	ft_change_word(char *var, char **word, int *i, t_data *data)
 {
@@ -138,8 +174,16 @@ static int	ft_change_word(char *var, char **word, int *i, t_data *data)
 	*word = new_word;
 	return (0);
 }
+
 /*
-Funkcja `ft_exit_extension` zastępuje w ciągu `word` zmienną `$?` wartością kodu wyjścia ostatniego polecenia, przechowywaną w `data->cmd_exit_status`. Najpierw zwalnia pamięć dla zmiennej `var`, następnie konwertuje kod wyjścia na ciąg znaków za pomocą `ft_itoa`. Alokuje nowy ciąg, w którym `$?` zastępowane jest tym kodem, aktualizuje wskaźnik `word` i przesuwa indeks `i`. Jeśli wystąpi błąd alokacji pamięci, funkcja zwalnia zasoby i zwraca -1.
+Funkcja `ft_exit_extension` zastępuje w ciągu `word` zmienną `$?` 
+wartością kodu wyjścia ostatniego polecenia,
+ przechowywaną w `data->cmd_exit_status`. 
+Najpierw zwalnia pamięć dla zmiennej `var`, 
+następnie konwertuje kod wyjścia na ciąg znaków za pomocą `ft_itoa`. 
+Alokuje nowy ciąg, w którym `$?` zastępowane jest tym kodem, 
+aktualizuje wskaźnik `word` i przesuwa indeks `i`. 
+Jeśli wystąpi błąd alokacji pamięci, funkcja zwalnia zasoby i zwraca -1.
 */
 static int	ft_exit_extension(char *var, char **word, int *i, t_data *data)
 {
