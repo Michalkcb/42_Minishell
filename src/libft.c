@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 16:20:20 by ltomasze          #+#    #+#             */
-/*   Updated: 2025/01/21 18:50:28 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/25 16:41:16 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,7 @@ char	*ft_strchr(const char *s, int c)
 		p = &s[i];
 	return ((char *)p);
 }
+
 char	*ft_strtrim(char const *s1, char const *set)
 {
 	size_t	start;
@@ -212,8 +213,11 @@ char	*ft_strtrim(char const *s1, char const *set)
 
 int	ft_isalnum(int c)
 {
-	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9'));
+	return ((c >= 'A' && c <= 'Z')
+		|| (c >= 'a' && c <= 'z')
+		|| (c >= '0' && c <= '9'));
 }
+
 int	ft_isspace(char c)
 {
 	if (c == ' ' || c == '\t' || c == '\n'
@@ -223,10 +227,12 @@ int	ft_isspace(char c)
 	}
 	return (0);
 }
+
 int	ft_isalpha(int c)
 {
 	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
 }
+
 int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')
