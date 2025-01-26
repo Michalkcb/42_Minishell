@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/29 13:34:28 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/26 11:09:21 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/26 11:23:03 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int	is_operator(char c);
 static void	handle_operators(const char *str, char *str_final, int *i, int *j);
 static void	handle_quotes(char *str, char *str_final, int *i, int *j);
 static int	realloc_str_final(char **str_final,
-	int j, int str_final_len);
+				int j, int str_final_len);
 
 /*
 Funkcja `process_str` przetwarza wejściowy ciąg znaków `str` 
