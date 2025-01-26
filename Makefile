@@ -6,7 +6,7 @@
 #    By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/19 16:44:33 by ltomasze          #+#    #+#              #
-#    Updated: 2025/01/21 20:11:07 by mbany            ###   ########.fr        #
+#    Updated: 2025/01/26 10:21:47 by mbany            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,16 +54,23 @@
 NAME = minishell
 CC = cc
 CFLAGS = -Wall -Wextra -Werror -Iincludes -g
+
+# Source files
 SRCS = src/main.c \
-src/libft.c \
+src/libft00.c \
+src/libft01.c \
+src/libft02.c \
+src/libft03.c \
 src/envp.c \
 src/signals.c \
 src/free.c \
 src/check_syntax.c \
 src/error.c \
 src/utils.c \
-src/sanitize.c \
-src/commands.c \
+src/sanitize00.c \
+src/sanitize01.c \
+src/commands00.c \
+src/commands01.c \
 src/tokens.c \
 src/tokens2.c \
 src/clean_toknes.c \
@@ -80,8 +87,11 @@ src/file_descriptor_handlers.c \
 src/builtin_echo.c \
 src/get_next_line.c
 
+# Object files
 OBJ_DIR = obj
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
+
+
 
 all: $(NAME)
 
