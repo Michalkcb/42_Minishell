@@ -6,7 +6,7 @@
 /*   By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 18:19:19 by mbany             #+#    #+#             */
-/*   Updated: 2025/01/26 11:26:45 by mbany            ###   ########.fr       */
+/*   Updated: 2025/01/26 11:42:37 by mbany            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void		ft_free_commands(t_cmd **commands);
 int			check_syntax(char *line);
 int			check_if_line_is_empty(char *line);
 int			check_for_unclosed_quotes(char *line);
-int			heck_for_missing_command(char *line);
+int			check_for_missing_command(char *line);
 
 //error
 int			ft_error_message(char *str, int num);
