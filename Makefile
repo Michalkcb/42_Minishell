@@ -6,7 +6,7 @@
 #    By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/19 16:44:33 by ltomasze          #+#    #+#              #
-#    Updated: 2025/01/26 10:21:47 by mbany            ###   ########.fr        #
+#    Updated: 2025/01/26 10:50:54 by mbany            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,8 @@ src/libft00.c \
 src/libft01.c \
 src/libft02.c \
 src/libft03.c \
-src/envp.c \
+src/envp00.c \
+src/envp01.c \
 src/signals.c \
 src/free.c \
 src/check_syntax.c \
