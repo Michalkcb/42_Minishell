@@ -6,7 +6,7 @@
 #    By: mbany <mbany@student.42warsaw.pl>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/12/19 16:44:33 by ltomasze          #+#    #+#              #
-#    Updated: 2025/01/26 10:50:54 by mbany            ###   ########.fr        #
+#    Updated: 2025/01/26 11:24:52 by mbany            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,8 @@ src/envp00.c \
 src/envp01.c \
 src/signals.c \
 src/free.c \
-src/check_syntax.c \
+src/check_syntax00.c \
+src/check_syntax01.c \
 src/error.c \
 src/utils.c \
 src/sanitize00.c \
@@ -83,7 +84,9 @@ src/builtin_pwd.c \
 src/builtin_export.c \
 src/builtin_unset.c \
 src/builtin_cd.c\
-src/execute.c \
+src/execute00.c \
+src/execute01.c \
+src/execute02.c \
 src/file_descriptor_handlers.c \
 src/builtin_echo.c \
 src/get_next_line.c
