@@ -71,6 +71,7 @@ void	increment_shlvl(t_envp *head)
 	if (!shlvl)
 		perror("ft_itoa");
 	free(node->value);
+	node->value = ft_strjoin("SHLVL=", shlvl);
 	if (!node->value)
 		perror("ft_strjoin");
 	free(shlvl);
